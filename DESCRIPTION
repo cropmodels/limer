@@ -1,0 +1,10 @@
+Package: limer
+Type: Package
+Title: Compiling agricultural research data 
+Version: 0.0-1
+Date: 2021-06-08
+Author: Robert Hijmans
+Maintainer: <r.hijmans@gmail.com>
+Description: functions for the GAIA project
+License: GPL (>=3)
+
