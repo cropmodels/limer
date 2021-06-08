@@ -1,10 +1,18 @@
 
 # https://content.ces.ncsu.edu/soil-acidity-and-liming-basic-information-for-farmers-and-gardeners
-effective_CCE <- function(CCE, fine, medium) {
+CCE_adjust_size <- function(CCE, fine, medium) {
 	# fine = smaller than 60-mesh size
 	# medium is between 8- and 60-mesh size
 	CCE * (medium * 0.5 + fine)
 }
+
+#https://ag.umass.edu/turf/fact-sheets/soil-ph-liming
+CCE_adjust_depth <- function(CCE, depth) {
+	x <- c(7.5, 10, 12.5, 17.5)
+	y <- c(0.4, 0.6, 0.7, 1)
+	CCE * stats::approx(x, y, depth, rule=2)$y
+}
+
 
 CCE <- function() {
 	#https://extension.psu.edu/soil-acidity-and-aglime

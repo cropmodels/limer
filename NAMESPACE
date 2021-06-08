@@ -1,5 +1,6 @@
 export(
 acidification_equivalents,
-CCE, effective_CCE, 
+CCE, CCE_adjust_size, CCE_adjust_depth,
 nc_acidity, nc_lime
 )
+
