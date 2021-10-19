@@ -1,0 +1,42 @@
+\name{convert}
+\alias{convert}
+
+\title{
+Convert lime rate units
+}
+\description{
+Unit convertion of lime rates from meq of Ca per 100g of soils to metric tons per hectare or vice versa. Note that meq/100g is the same as cmol_c/kg.
+}
+
+\usage{
+convert(x, sbd, sd, to_t_ha = TRUE)
+}
+
+\arguments{
+  \item{x}{lime rate, either in meq/100g of soil (if \code{to_t_ha = TRUE}) or in t/ha (if to_t_ha = FALSE)}
+  \item{sbd}{soil bulk density (g/cm3, kg/dm3, or kg/l)}
+  \item{sd}{soil depth (cm)}
+}
+
+\details{
+It is assumed that Ca+2 provides 2 mmol of positive charges per mmol. 
+}
+
+\value{
+Converted lime rate, either in t/ha (if \code{to_t_ha = TRUE}) or in meq/100g (if to_t_ha = FALSE)
+}
+
+\author{
+Fernando Aramburu Merlos
+}
+
+\examples{
+lr <- 2
+sbd <- 1.4
+sd <- 15
+
+convert(lr, sbd, sd, to_t_ha = TRUE)
+
+
+}
+

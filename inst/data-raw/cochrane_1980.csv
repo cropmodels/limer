@@ -1,0 +1,41 @@
+source,soil_id,LR_meq,LR_kg.ha,Al_sat,LR_hat,soil.type,pH,exch_Al,exch_Ca_Mg,exch_Ca,exch_Mg,clay,clay_l,clay_h,method
+Kamprath1970,norfol,0.455,NA,52,499,Typic Kandiudults,4.5,0.91,0.2,NA,NA,0.1,0.02,0.18,incubation
+Kamprath1970,norfol,0.91,NA,27,915,Typic Kandiudults,4.5,0.91,0.2,NA,NA,0.1,0.02,0.18,incubation
+Kamprath1970,norfol,1.365,NA,13,1531,Typic Kandiudults,4.5,0.91,0.2,NA,NA,0.1,0.02,0.18,incubation
+Kamprath1970,norfol,1.82,NA,6,1687,Typic Kandiudults,4.5,0.91,0.2,NA,NA,0.1,0.02,0.18,incubation
+Kamprath1970,rainsk,0.52,NA,50,555,Typic Paleaquults,4.7,1.04,0.3,NA,NA,0.15,0.02,0.27,incubation
+Kamprath1970,rainsk,1.04,NA,26,1037,Typic Paleaquults,4.7,1.04,0.3,NA,NA,0.15,0.02,0.27,incubation
+Kamprath1970,rainsk,1.56,NA,10,1812,Typic Paleaquults,4.7,1.04,0.3,NA,NA,0.15,0.02,0.27,incubation
+Kamprath1970,rainsk,2.08,NA,6,1919,Typic Paleaquults,4.7,1.04,0.3,NA,NA,0.15,0.02,0.27,incubation
+Kamprath1970,dunbar,1.165,NA,48,1205,Aeric Paleaquults,4.5,2.33,0.85,NA,NA,0.17,0.05,0.27,incubation
+Kamprath1970,dunbar,2.33,NA,23,2398,Aeric Paleaquults,4.5,2.33,0.85,NA,NA,0.17,0.05,0.27,incubation
+Kamprath1970,dunbar,3.495,NA,5,4342,Aeric Paleaquults,4.5,2.33,0.85,NA,NA,0.17,0.05,0.27,incubation
+Kamprath1970,dunbar,4.66,NA,3,4469,Aeric Paleaquults,4.5,2.33,0.85,NA,NA,0.17,0.05,0.27,incubation
+Kamprath1970,porsmo,2.09,NA,33,2404,Typic Umbraquults,4.7,4.18,3.63,NA,NA,0.17,0.05,0.27,incubation
+Kamprath1970,porsmo,4.18,NA,16,4396,Typic Umbraquults,4.7,4.18,3.63,NA,NA,0.17,0.05,0.27,incubation
+Kamprath1970,porsmo,6.27,NA,5,7579,Typic Umbraquults,4.7,4.18,3.63,NA,NA,0.17,0.05,0.27,incubation
+Kamprath1970,porsmo,8.36,NA,2,8048,Typic Umbraquults,4.7,4.18,3.63,NA,NA,0.17,0.05,0.27,incubation
+Leon1978,leonul,0.5,NA,61.1,767,Typic Haplustox,4.5,3.2,NA,0.8,0.4,0.71,NA,NA,incubation
+Leon1978,leonul,1,NA,56.7,1058,Typic Haplustox,4.5,3.2,NA,0.8,0.4,0.71,NA,NA,incubation
+Leon1978,leonul,2,NA,44.1,1889,Typic Haplustox,4.5,3.2,NA,0.8,0.4,0.71,NA,NA,incubation
+Leon1978,leonul,4,NA,28.5,3892,Typic Haplustox,4.5,3.2,NA,0.8,0.4,0.71,NA,NA,incubation
+Leon1978,leonox,0.5,NA,79.1,583,Orthoxic Palehumult,4.8,3.11,NA,0.2,0.13,0.37,NA,NA,incubation
+Leon1978,leonox,1,NA,67.9,1161,Orthoxic Palehumult,4.8,3.11,NA,0.2,0.13,0.37,NA,NA,incubation
+Leon1978,leonox,2,NA,56.6,1744,Orthoxic Palehumult,4.8,3.11,NA,0.2,0.13,0.37,NA,NA,incubation
+Leon1978,leonox,4,NA,26.5,4397,Orthoxic Palehumult,4.8,3.11,NA,0.2,0.13,0.37,NA,NA,incubation
+Salinas1978,salina,NA,500,60,587,Acrustox,4.7,1.04,0.15,NA,NA,0.454,NA,NA,field
+Salinas1978,salina,NA,1500,41,1325,Acrustox,4.7,1.04,0.15,NA,NA,0.454,NA,NA,field
+Salinas1978,salina,NA,4000,22,NA,Acrustox,4.7,1.04,0.15,NA,NA,0.454,NA,NA,field
+Salinas1978,salina,NA,500,62,544,Acrustox,4.7,1.04,0.15,NA,NA,0.454,NA,NA,field
+Salinas1978,salina,NA,1500,38,1410,Acrustox,4.7,1.04,0.15,NA,NA,0.454,NA,NA,field
+Salinas1978,salina,NA,4000,4,NA,Acrustox,4.7,1.04,0.15,NA,NA,0.454,NA,NA,field
+Salinas1978,salina,NA,500,64,501,Acrustox,4.7,1.04,0.15,NA,NA,0.454,NA,NA,field
+Salinas1978,salina,NA,1500,40,1354,Acrustox,4.7,1.04,0.15,NA,NA,0.454,NA,NA,field
+Salinas1978,salina,NA,4000,5,NA,Acrustox,4.7,1.04,0.15,NA,NA,0.454,NA,NA,field
+vanRaij1977,vanrai,NA,1940,20,1824,Acrustox,4.9,1.1,0.6,NA,NA,NA,NA,NA,field
+vanRaij1977,vanrai,NA,3880,7,NA,Acrustox,4.9,1.1,0.6,NA,NA,NA,NA,NA,field
+vanRaij1977,vanrai,NA,5820,0,NA,Acrustox,4.9,1.1,0.6,NA,NA,NA,NA,NA,field
+GonzalezErico1976,gonzal,NA,1000,39,955,Acrustox,4.6,1.1,0.36,NA,NA,NA,NA,NA,field
+GonzalezErico1977,gonzal,NA,2000,19,1974,Acrustox,4.6,1.1,0.36,NA,NA,NA,NA,NA,field
+GonzalezErico1978,gonzal,NA,4000,4,NA,Acrustox,4.6,1.1,0.36,NA,NA,NA,NA,NA,field
+GonzalezErico1979,gonzal,NA,8000,0,NA,Acrustox,4.6,1.1,0.36,NA,NA,NA,NA,NA,field

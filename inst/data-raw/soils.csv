@@ -1,0 +1,10 @@
+soil_id,source,type,pH,exch_ac,ECEC,clay,clay_l,clay_h,SBD,SD,method
+norfol,Kamprath1970,Typic Kandiudults,4.45,0.91,1.11,0.1,0.02,0.18,NA,NA,incubation
+rainsk,Kamprath1970,Typic Paleaquults,4.7,1.04,1.34,0.15,0.02,0.27,NA,NA,incubation
+dunbar,Kamprath1970,Aeric Paleaquults,4.5,2.33,3.18,0.17,0.05,0.27,NA,NA,incubation
+porsmo,Kamprath1970,Typic Umbraquults,4.7,4.18,7.81,0.17,0.05,0.27,NA,NA,incubation
+leonox,Cochrane1980,Orthoxic Palehumult,4.5,3.2,4.4,0.71,NA,NA,NA,NA,incubation
+leonul,Cochrane1980,Typic Haplustox,4.8,3.11,3.44,0.37,NA,NA,NA,NA,incubation
+salina,Cochrane1980,Acrustox,4.7,1.04,1.19,0.454,NA,NA,NA,NA,field
+vanrai,Cochrane1980,Acrustox,4.9,1.1,1.7,NA,NA,NA,NA,NA,field
+gonzal,Cochrane1980,Acrustox,4.6,1.1,1.46,NA,NA,NA,NA,NA,field
