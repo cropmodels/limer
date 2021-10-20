@@ -1,5 +1,5 @@
-\name{nu_lime}
-\alias{nu_lime}
+\name{nu_lr}
+\alias{nu_lr}
 
 \title{
 NuMaSS lime requirement formula
@@ -10,7 +10,7 @@ Empirical formula to estimate the lime rate required to alleviate or neutralize 
 }
 
 \usage{
-nu_lime(TAS, exch_ac, ECEC, clay)
+nu_lr(TAS, exch_ac, ECEC, clay)
 }
 
 \arguments{
@@ -38,7 +38,7 @@ Fernando Aramburu Merlos
 
 
 \seealso{
-\code{\link{limer}, \link{ka_lime}, \link{co_lime}, \link{my_lime}, \link{bv_lime}, \link{gt_lime}}, 
+\code{\link{lr}, \link{ka_lr}, \link{co_lr}, \link{my_lr}, \link{bv_lr}, \link{gt_lr}}, 
 }
 
 \examples{
@@ -47,30 +47,30 @@ exch_ac <- 2:6
 ECEC <- 10
 clay <- 0.2
 
-nu_lime(TAS, exch_ac, ECEC, clay)
+nu_lr(TAS, exch_ac, ECEC, clay)
 
 TAS <- 10
-nu_lime(TAS, exch_ac, ECEC, clay)
+nu_lr(TAS, exch_ac, ECEC, clay)
 
 TAS <- 5
-nu_lime(TAS, exch_ac, ECEC, clay)
+nu_lr(TAS, exch_ac, ECEC, clay)
 
 
 # clay effect (only when very low ECEC per clay)
 TAS <- 20
 clay <- 0.2
-nu_lime(TAS, exch_ac, ECEC, clay)
+nu_lr(TAS, exch_ac, ECEC, clay)
 
 clay <- 0.99
-nu_lime(TAS, exch_ac, ECEC, clay)
+nu_lr(TAS, exch_ac, ECEC, clay)
 
 
 exch_ac <- seq(.2,.6,.1)
 ECEC <- 1
 clay <- 0.2
-nu_lime(TAS, exch_ac, ECEC, clay)
+nu_lr(TAS, exch_ac, ECEC, clay)
 
 clay <- 0.4
-nu_lime(TAS, exch_ac, ECEC, clay)
+nu_lr(TAS, exch_ac, ECEC, clay)
 
 }

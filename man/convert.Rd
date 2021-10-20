@@ -16,6 +16,7 @@ convert(x, sbd, sd, to_t_ha = TRUE)
   \item{x}{lime rate, either in meq/100g of soil (if \code{to_t_ha = TRUE}) or in t/ha (if to_t_ha = FALSE)}
   \item{sbd}{soil bulk density (g/cm3, kg/dm3, or kg/l)}
   \item{sd}{soil depth (cm)}
+  \item{to_t_ha}{if \code{TRUE}, lime rate is transformed from meq/100g of soil to tons per hectare, if \code{FALSE}, from t/ha to meq/100g of soil.}
 }
 
 \details{
@@ -31,11 +32,11 @@ Fernando Aramburu Merlos
 }
 
 \examples{
-lr <- 2
+lime_rate <- 2
 sbd <- 1.4
 sd <- 15
 
-convert(lr, sbd, sd, to_t_ha = TRUE)
+convert(lime_rate, sbd, sd, to_t_ha = TRUE)
 
 
 }

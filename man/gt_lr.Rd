@@ -1,5 +1,5 @@
-\name{gt_lime}
-\alias{gt_lime}
+\name{gt_lr}
+\alias{gt_lr}
 
 \title{
 Teixeira et al. (2020) lime requirement algorithm
@@ -10,7 +10,7 @@ Empirical algorithm to estimate the lime rate required to alleviate or neutraliz
 }
 
 \usage{
-gt_lime(pH, OM, pot_ac, X, exch_Ca, exch_Mg)
+gt_lr(pH, OM, pot_ac, X, exch_Ca, exch_Mg)
 }
 
 \arguments{
@@ -44,7 +44,7 @@ Fernando Aramburu Merlos
 
 
 \seealso{
-\code{\link{limer}, \link{ka_lime}, \link{co_lime}, \link{nu_lime}, \link{my_lime}, \link{bv_lime}}, 
+\code{\link{lr}, \link{ka_lr}, \link{co_lr}, \link{nu_lr}, \link{my_lr}, \link{bv_lr}}, 
 }
 
 \examples{
@@ -52,18 +52,18 @@ pH <- seq(4, 5.5, .5)
 OM <- 40
 pot_ac <- 6
   
-gt_lime(pH, OM, pot_ac)
+gt_lr(pH, OM, pot_ac)
 
 pot_ac <- 12
-gt_lime(pH, OM, pot_ac)
+gt_lr(pH, OM, pot_ac)
 
 pot_ac <- 6
 OM <- 80
-gt_lime(pH, OM, pot_ac)
+gt_lr(pH, OM, pot_ac)
 
 pot_ac <- 12
 OM <- 80
-gt_lime(pH, OM, pot_ac)
+gt_lr(pH, OM, pot_ac)
 
 
 # X effect
@@ -73,10 +73,10 @@ exch_Ca <- 0.5
 exch_Mg <- 0.2
 X <- 2
 
-gt_lime(pH, OM, pot_ac)
-gt_lime(pH, OM, pot_ac, X, exch_Ca, exch_Mg)
+gt_lr(pH, OM, pot_ac)
+gt_lr(pH, OM, pot_ac, X, exch_Ca, exch_Mg)
 
 exch_Ca <- 0.05
 exch_Mg <- 0.05
-gt_lime(pH, OM, pot_ac, X, exch_Ca, exch_Mg)
+gt_lr(pH, OM, pot_ac, X, exch_Ca, exch_Mg)
 }
