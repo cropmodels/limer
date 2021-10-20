@@ -23,24 +23,24 @@ lr(method, units = "meq/100g", ...)
 \details{
   The available methods are:
   \itemize{
-    \item{\code{my}}: My method (still experimental). See \code{\link{my_lr}}
-    \item{\code{ka}}: Kamprath (1970). See \code{\link{ka_lr}}
-    \item{\code{co}}: Cochrane et al. (1980). See \code{\link{co_lr}}
-    \item{\code{nu}}: NuMaSS. See \code{\link{nu_lr}}
-    \item{\code{bv}}: Brazil V. See \code{\link{bv_lr}}
-    \item{\code{gt}}: Teixeira et al. (2020). See \code{\link{gt_lr}}
+    \item{\code{my}}: My method (still experimental). See \code{\link{lr_my}}
+    \item{\code{ka}}: Kamprath (1970). See \code{\link{lr_ka}}
+    \item{\code{co}}: Cochrane et al. (1980). See \code{\link{lr_co}}
+    \item{\code{nu}}: NuMaSS. See \code{\link{lr_nu}}
+    \item{\code{bv}}: Brazil V. See \code{\link{lr_bv}}
+    \item{\code{gt}}: Teixeira et al. (2020). See \code{\link{lr_gt}}
   }
   
   The minimum set of arguments needed for each method are shown in the following table. (Argument description and   alternatives are listed below) 
   
   \tabular{ccccccc}{ 
   method    \tab    \code{exch_ac}   \tab   \code{ECEC}   \tab \code{TAS} \tab \code{CEC_7} \tab \code{pH}   \tab   \code{OM}    \cr
-  \code{ka_lr} \tab X   \cr
-  \code{co_lr} \tab X \tab X \tab X  \cr
-  \code{nu_lr} \tab X \tab X \tab X  \cr
-  \code{my_lr} \tab X \tab X \tab X  \cr
-  \code{bv_lr} \tab X \tab X \tab \tab X  \cr
-  \code{gt_lr} \tab X \tab X \tab \tab X \tab X \tab X \cr
+  \code{lr_ka} \tab X   \cr
+  \code{lr_co} \tab X \tab X \tab X  \cr
+  \code{lr_nu} \tab X \tab X \tab X  \cr
+  \code{lr_my} \tab X \tab X \tab X  \cr
+  \code{lr_bv} \tab X \tab X \tab \tab X  \cr
+  \code{lr_gt} \tab X \tab X \tab \tab X \tab X \tab X \cr
   
   }  
   
@@ -64,15 +64,15 @@ lr(method, units = "meq/100g", ...)
     
     \item{\code{pot_ac}}{Potencial acidity. If not provided it can be estimated from \code{exch_ac}, \code{ECEC}, \code{CEC_7}.}
 
-    \item{\code{clay}}{Clay fraction of the soil {0,1}. Optional for NuMaSS and my methods. See \code{\link{nu_lr}, \link{my_lr}}}
+    \item{\code{clay}}{Clay fraction of the soil {0,1}. Optional for NuMaSS and my methods. See \code{\link{lr_nu}, \link{lr_my}}}
 
-    \item{\code{a}}{Lime factor for my method. Default value is 0.8. See \code{\link{my_lr}}}
+    \item{\code{a}}{Lime factor for my method. Default value is 0.8. See \code{\link{lr_my}}}
     
-    \item{\code{b}}{Lime factor for my method. Default value is 0.2. See \code{\link{my_lr}}}
+    \item{\code{b}}{Lime factor for my method. Default value is 0.2. See \code{\link{lr_my}}}
     
-    \item{\code{X}}{Crop nutrient requirement for Calcium and Magnesium, optional for Teixeira method (\code{\link{gt_lr}})}
+    \item{\code{X}}{Crop nutrient requirement for Calcium and Magnesium, optional for Teixeira method (\code{\link{lr_gt}})}
     
-    \item{target_Ve}{Target base saturation after liming (\%). Optional for Brazil V method. See \code{\link{bv_lr}}}
+    \item{target_Ve}{Target base saturation after liming (\%). Optional for Brazil V method. See \code{\link{lr_bv}}}
     
     \item{crop_type}{One of \code{c("pasture", "cereal", "legume", "vegetable", "fruit")}. Needed for Brazil V method (if \code{target_Ve} is missing). Defualt value is \code{"cereal"}}
 
@@ -91,7 +91,7 @@ Recommended lime rate.
 }
 
 \seealso{
-\code{\link{ka_lr}, \link{co_lr}, \link{nu_lr}, \link{my_lr}, \link{bv_lr}, \link{gt_lr}, \link{convert}}, 
+\code{\link{lr_ka}, \link{lr_co}, \link{lr_nu}, \link{lr_my}, \link{lr_bv}, \link{lr_gt}, \link{convert}}, 
 }
 
 

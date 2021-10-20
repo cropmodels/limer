@@ -1,5 +1,5 @@
-\name{my_lr}
-\alias{my_lr}
+\name{lr_my}
+\alias{lr_my}
 
 \title{
 Experimental lime requirement formula
@@ -10,7 +10,7 @@ Empirical formula to estimate the lime rate required to alleviate or neutralize 
 }
 
 \usage{
-my_lr(TAS, exch_ac, ECEC, a = 0.8, b = 0.2, clay = NULL)
+lr_my(TAS, exch_ac, ECEC, a = 0.8, b = 0.2, clay = NULL)
 }
 
 \arguments{
@@ -55,45 +55,45 @@ exch_ac <- 2:6
 ECEC <- 10
 clay <- 0.2
 
-my_lr(TAS, exch_ac, ECEC)
+lr_my(TAS, exch_ac, ECEC)
 
 TAS <- 10
-my_lr(TAS, exch_ac, ECEC)
+lr_my(TAS, exch_ac, ECEC)
 
 TAS <- 5
-my_lr(TAS, exch_ac, ECEC)
+lr_my(TAS, exch_ac, ECEC)
 
 
 # reducing a and b factors can result in NaN (no solution)
-my_lr(TAS, exch_ac, ECEC, a = 0.7)
-my_lr(TAS, exch_ac, ECEC, a = 0.5)
+lr_my(TAS, exch_ac, ECEC, a = 0.7)
+lr_my(TAS, exch_ac, ECEC, a = 0.5)
 
-my_lr(TAS, exch_ac, ECEC, b = 0.1)
-my_lr(TAS, exch_ac, ECEC, b = 0.22)
-my_lr(TAS, exch_ac, ECEC, b = 0.25)
-my_lr(TAS, exch_ac, ECEC, b = 0.3)
+lr_my(TAS, exch_ac, ECEC, b = 0.1)
+lr_my(TAS, exch_ac, ECEC, b = 0.22)
+lr_my(TAS, exch_ac, ECEC, b = 0.25)
+lr_my(TAS, exch_ac, ECEC, b = 0.3)
 
 
 # clay effect (only when very low ECEC per clay)
 TAS <- 20
 clay <- 0.2
-my_lr(TAS, exch_ac, ECEC, clay = clay)
+lr_my(TAS, exch_ac, ECEC, clay = clay)
 
 clay <- 0.5
-my_lr(TAS, exch_ac, ECEC, clay = clay)
+lr_my(TAS, exch_ac, ECEC, clay = clay)
 
 clay <- 0.9
-my_lr(TAS, exch_ac, ECEC, clay = clay)
+lr_my(TAS, exch_ac, ECEC, clay = clay)
 
 exch_ac <- seq(.2,.6,.1)
 ECEC <- 1
 clay <- 0.2
-my_lr(TAS, exch_ac, ECEC, clay = clay)
+lr_my(TAS, exch_ac, ECEC, clay = clay)
 
 clay <- 0.5
-my_lr(TAS, exch_ac, ECEC, clay = clay)
+lr_my(TAS, exch_ac, ECEC, clay = clay)
 
 clay <- 0.9
-my_lr(TAS, exch_ac, ECEC, clay = clay)
+lr_my(TAS, exch_ac, ECEC, clay = clay)
 
 }

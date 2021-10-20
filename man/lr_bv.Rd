@@ -1,5 +1,5 @@
-\name{bv_lr}
-\alias{bv_lr}
+\name{lr_bv}
+\alias{lr_bv}
 
 \title{
 Brazil V method to estimate lime requirements
@@ -10,7 +10,7 @@ Empirical formula to estimate the lime rate required to alleviate or neutralize 
 }
 
 \usage{
-bv_lr(exch_Ca, exch_Mg, exch_K, exch_Na, CEC_7, target_Ve, crop_type)
+lr_bv(exch_Ca, exch_Mg, exch_K, exch_Na, CEC_7, target_Ve, crop_type)
 }
 
 \arguments{
@@ -57,12 +57,12 @@ exch_Na <- 0.5
 CEC_7 <- 12
 
 target_Ve <- 60
-bv_lr(exch_Ca, exch_Mg, exch_K, exch_Na, CEC_7, target_Ve)
+lr_bv(exch_Ca, exch_Mg, exch_K, exch_Na, CEC_7, target_Ve)
 
 target_Ve <- 80
-bv_lr(exch_Ca, exch_Mg, exch_K, exch_Na, CEC_7, target_Ve)
+lr_bv(exch_Ca, exch_Mg, exch_K, exch_Na, CEC_7, target_Ve)
 
-bv_lr(exch_Ca, exch_Mg, exch_K, exch_Na, CEC_7, crop_type = "cereal")
-bv_lr(exch_Ca, exch_Mg, exch_K, exch_Na, CEC_7, crop_type = "fruit")
+lr_bv(exch_Ca, exch_Mg, exch_K, exch_Na, CEC_7, crop_type = "cereal")
+lr_bv(exch_Ca, exch_Mg, exch_K, exch_Na, CEC_7, crop_type = "fruit")
 
 }

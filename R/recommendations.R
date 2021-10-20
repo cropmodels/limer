@@ -79,13 +79,13 @@ lr <- function(method, units = "meq/100g", ...){
     if(is.null(l$TAS)) stop("TAS is needed for my method")
     if(is.null(l$a)) l$a <- 0.8
     if(is.null(l$b)) l$b <- 0.2
-    lime <- my_lr(l$TAS, l$exch_ac, l$ECEC, a = l$a, b = l$b, clay = l$clay)
+    lime <- lr_my(l$TAS, l$exch_ac, l$ECEC, a = l$a, b = l$b, clay = l$clay)
   }
   
   
   if(meth == "ka"){
     message("using Kamprath (1970) method")
-    lime <- ka_lr(l$exch_ac)
+    lime <- lr_ka(l$exch_ac)
   }
   
   
@@ -94,7 +94,7 @@ lr <- function(method, units = "meq/100g", ...){
     if(is.null(l$TAS)) stop("TAS is needed for Cochrane method")
     exch_Ca <- l$ECEC - l$exch_ac
     exch_Mg <- rep(0, length(exch_Ca))
-    lime <- co_lr(l$TAS, l$exch_ac, exch_Ca, exch_Mg)
+    lime <- lr_co(l$TAS, l$exch_ac, exch_Ca, exch_Mg)
   }
   
   
@@ -110,7 +110,7 @@ lr <- function(method, units = "meq/100g", ...){
         l$clay[is.na(l$clay)] <- 0.01
       }
     } 
-    lime <- nu_lr(l$TAS, l$exch_ac, l$ECEC, l$clay)
+    lime <- lr_nu(l$TAS, l$exch_ac, l$ECEC, l$clay)
   }
   
   
@@ -125,7 +125,7 @@ lr <- function(method, units = "meq/100g", ...){
     }
     exch_Ca <- l$ECEC - l$exch_ac
     exch_Mg <- exch_K <- exch_Na <- rep(0, length(exch_Ca))
-    lime <- bv_lr(exch_Ca, exch_Mg, exch_K, exch_Na, 
+    lime <- lr_bv(exch_Ca, exch_Mg, exch_K, exch_Na, 
                     l$CEC_7, l$target_Ve, l$crop_type)
   }
   
@@ -135,7 +135,7 @@ lr <- function(method, units = "meq/100g", ...){
     if(is.null(l$pH)|is.null(l$OM)|is.null(l$pot_ac)){
       stop("pH, OM and pot_ac are needed for Goncalvez Texeira method")
     }
-    lime <- gt_lr(l$pH, l$OM, l$pot_ac, l$X, l$exch_Ca, l$exch_Mg)
+    lime <- lr_gt(l$pH, l$OM, l$pot_ac, l$X, l$exch_Ca, l$exch_Mg)
   }
   
   
@@ -161,14 +161,14 @@ lr <- function(method, units = "meq/100g", ...){
 # individual formulas
 
 # Kamprath (1970) 
-ka_lr <- function(exch_Al, lf = 1.5){
+lr_ka <- function(exch_Al, lf = 1.5){
   lime <- exch_Al * lf
   return(lime)
 }
 
 
 # Cochrane, et al. (1980).
-co_lr <- function(TAS, exch_Al, exch_Ca, exch_Mg){
+lr_co <- function(TAS, exch_Al, exch_Ca, exch_Mg){
   ias <- 100 * exch_Al/(exch_Al + exch_Ca + exch_Mg)
   d_al <- exch_Al - (TAS/100 * (exch_Al + exch_Ca + exch_Mg))
   lime <- ifelse(TAS > ias/3, 1.5 * d_al, 2 * d_al)
@@ -179,7 +179,7 @@ co_lr <- function(TAS, exch_Al, exch_Ca, exch_Mg){
 
 # lf is converted from original formula to get lime recommendation in meq/100g assuming that the original formula considered a soil depth of 15 cm and a soil bulk density of 1g/cm3
 
-nu_lr <- function(TAS, exch_ac, ECEC, clay){
+lr_nu <- function(TAS, exch_ac, ECEC, clay){
   lf <- ifelse(ECEC/clay < 4.5, 10/3, 26/15) 
   lime <- lf * (exch_ac - ECEC * TAS/100) + pmax(10 * ((19 - TAS)/100 * ECEC), 0)
   return(lime)
@@ -187,7 +187,7 @@ nu_lr <- function(TAS, exch_ac, ECEC, clay){
 
 
 # Aramburu Merlos et al. xxx
-my_lr <- function(TAS, exch_ac, ECEC, a = 0.8, b = 0.2, clay = NULL){
+lr_my <- function(TAS, exch_ac, ECEC, a = 0.8, b = 0.2, clay = NULL){
   if(!is.null(clay)){
     a <- pmin(0.5 + (ECEC/clay)/40, 0.8)
   }
@@ -204,7 +204,7 @@ my_lr <- function(TAS, exch_ac, ECEC, a = 0.8, b = 0.2, clay = NULL){
 
 # Brazil V method (van Raij 1996) 
 
-bv_lr <- function(exch_Ca, exch_Mg, exch_K, exch_Na, CEC_7, 
+lr_bv <- function(exch_Ca, exch_Mg, exch_K, exch_Na, CEC_7, 
                     target_Ve = NULL, crop_type = "cereal"){
   if(is.null(target_Ve)){
     Ve <- data.frame(ct = c("pasture", "cereal", "legume", "vegetable", "fruit"), 
@@ -223,7 +223,7 @@ bv_lr <- function(exch_Ca, exch_Mg, exch_K, exch_Na, CEC_7,
 
 
 # Goncalvez Teixeira et al., (2020)
-gt_lr <- function(pH, OM, pot_ac, X = NULL, exch_Ca = NULL, exch_Mg = NULL){
+lr_gt <- function(pH, OM, pot_ac, X = NULL, exch_Ca = NULL, exch_Mg = NULL){
   om5 <- 0.0699 * (((5.8 - pH)* OM)^0.9225)
   ac5 <- 0.3750 * (((5.8 - pH)* pot_ac)^0.9127)
   om6 <- 0.1059 * (((6.0 - pH)* OM)^0.8729)

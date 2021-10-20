@@ -1,5 +1,5 @@
-\name{co_lr}
-\alias{co_lr}
+\name{lr_co}
+\alias{lr_co}
 
 \title{
 Cochrane et al. (1980) lime requirement formula
@@ -10,7 +10,7 @@ Empirical formula to estimate the lime rate required to alleviate or neutralize 
 }
 
 \usage{
-co_lr(TAS, exch_Al, exch_Ca, exch_Mg)
+lr_co(TAS, exch_Al, exch_Ca, exch_Mg)
 }
 
 \arguments{
@@ -47,9 +47,9 @@ exch_Al <- 2:6
 exch_Ca <- 5:1
 exch_Mg <- 3
 
-co_lr(TAS, exch_Al, exch_Ca, exch_Mg)
+lr_co(TAS, exch_Al, exch_Ca, exch_Mg)
 
 TAS <- 5
-co_lr(TAS, exch_Al, exch_Ca, exch_Mg)
+lr_co(TAS, exch_Al, exch_Ca, exch_Mg)
 
 }

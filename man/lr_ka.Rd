@@ -1,5 +1,5 @@
-\name{ka_lr}
-\alias{ka_lr}
+\name{lr_ka}
+\alias{lr_ka}
 
 \title{
 Kamprath (1970) lime requirement formula
@@ -10,7 +10,7 @@ Empirical formula to estimate the lime rate required to alleviate or neutralize 
 }
 
 \usage{
-ka_lr(exch_Al, lf = 1.5)
+lr_ka(exch_Al, lf = 1.5)
 }
 
 \arguments{
@@ -41,6 +41,6 @@ Fernando Aramburu Merlos
 
 \examples{
 exch_Al <- 0:4
-ka_lr(exch_Al)
-ka_lr(exch_Al, lf = 2)
+lr_ka(exch_Al)
+lr_ka(exch_Al, lf = 2)
 }
