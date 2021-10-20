@@ -1,4 +1,4 @@
-kamp <- read.csv("data-raw/kamprath_1970.csv")
+kamp <- read.csv("inst/data-raw/kamprath_1970.csv")
 save(kamp, file = "data/kamp.RData")
 d <- kamp
 rm(kamp)
@@ -8,7 +8,7 @@ rm(d, kamp)
 
 
 
-coch <- read.csv("data-raw/cochrane_1980.csv")
+coch <- read.csv("inst/data-raw/cochrane_1980.csv")
 
 save(coch, file = "data/coch.RData")
 rm(list = ls())
@@ -16,6 +16,7 @@ rm(list = ls())
 data(coch)
 
 
-linc <- read.csv("data-raw/lime_incubation_studies.csv")
+linc <- read.csv("inst/data-raw/lime_incubation_studies.csv")
 save(linc, file = "data/linc.RData")
 
+data(linc)

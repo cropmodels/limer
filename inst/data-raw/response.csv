@@ -1,4 +1,4 @@
-source,soil_id,lr_meq,lr_kg,al_sat,ph
+source,soil_id,LR_meq,LR_kg,al_sat,ph
 Kamprath1970,norfol,0.455,NA,52,4.9
 Kamprath1970,norfol,0.91,NA,27,5.4
 Kamprath1970,norfol,1.365,NA,13,5.6

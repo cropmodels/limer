@@ -15,7 +15,7 @@ Response of 4 North Carolina soils to increasing lime rate doses as measured in 
   A data frame with 20 observations on the following 9 variables:
   \describe{
     \item{\code{soil}}{Soil type name (series)}
-    \item{\code{lr}}{Lime rate (no units) expressed as fraction of the initial exchangeable aluminum. For each soil, lime rates in meq/100g of soil can be computed as \code{lr} times the initial Al}
+    \item{\code{LR}}{Lime rate (no units) expressed as fraction of the initial exchangeable aluminum. For each soil, lime rates in meq/100g of soil can be computed as \code{LR} times the initial Al}
     \item{\code{OM}}{Inital organic matter content (\%)}
     \item{\code{pH}}{Soil pH determined on a 1:1 soil-solution ratio}
     \item{\code{Al}}{Exchangeable aluminum (meq/100g of soil) or exchangeable acidity (see Details) extracted with a neutral unbuffered salt (1N KCl).}
@@ -50,10 +50,10 @@ kamp$Al_sat <- kamp$Al/(kamp$Al + kamp$Ca_Mg) * 100
 soils <- unique(kamp$soil)
 col <- c('red', 'dark green', 'blue', 'gold')
 
-plot(Al_sat ~ lr, data = kamp, type = "n")
+plot(Al_sat ~ LR, data = kamp, type = "n")
 for(i in 1:length(soils)){
   si <- kamp[kamp$soil == soils[i],]
-  lines(si$lr, si$Al_sat, col = col[i])
+  lines(si$LR, si$Al_sat, col = col[i])
 }
 legend(2.1, 85, legend = soils, col = col, 
        lty = 1, cex = .8, xjust = 1, yjust = 1, bty = "n")  

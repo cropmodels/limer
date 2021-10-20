@@ -1,4 +1,4 @@
-source,soil_id,lr,exch_Al,ECEC,Al_sat,pH,OM,clay
+source,soil_id,LR,exch_ac,ECEC,Al_sat,pH,OM,clay
 Kamprath1970,dunbar,0,2.33,3.18,73.27044025,4.5,4,0.17
 Kamprath1970,dunbar,1.165,1.5264,3.18,48,4.9,4,0.17
 Kamprath1970,dunbar,2.33,0.7314,3.18,23,5.3,4,0.17
