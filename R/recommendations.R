@@ -17,8 +17,8 @@ lr <- function(method, units = "meq/100g", ...){
   
 
   if(units %in% c("kg/ha", "t/ha")){
-    if(is.null(l$sbd) | is.null(sd)){
-      stop("Soil bulk density (sbd) and lime incorporation depth (sd) are needed to estimate lime requirement in kg or t per ha")
+    if(is.null(l$SBD) | is.null(l$SD)){
+      stop("Soil bulk density (SBD) and lime incorporation depth (SD) are needed to estimate lime requirement in kg or t per ha")
     }
   }
   
@@ -144,7 +144,7 @@ lr <- function(method, units = "meq/100g", ...){
   
   # unit transformation
   if(units %in% c("kg/ha", "t/ha")){
-    lime <- convert(lime, l$sbd, l$sd, to_t_ha = TRUE)
+    lime <- convert(lime, l$SBD, l$SD, to_t_ha = TRUE)
     if(units == "kg/ha") lime <- lime * 1000
   }
   

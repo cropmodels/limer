@@ -1,6 +1,6 @@
 \name{linc}
 \alias{linc}
-\docType{linc}
+\docType{data}
 \title{
 Soil response to liming in incubation studies
 }
@@ -41,7 +41,9 @@ Salinas, J. (1978). Differential response of some cereal and bean cultivars to A
 }
 
 \examples{
-
+data(linc)
+head(linc)
+summary(linc)
 }
 
 \keyword{datasets}

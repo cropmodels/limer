@@ -34,8 +34,8 @@ Recommended lime rate in milliequivalents of Calcium per 100 g of soil.
 }
 
 \references{
-van Raij B, Cantarella H, Quaggio JA, Furlani AMC. Recomendações de adubação e
-calagem para o Estado de São Paulo. 2. ed. Campinas: IAC; 1996.
+van Raij B, Cantarella H, Quaggio JA, Furlani AMC. Recomendacoes de adubacao e
+calagem para o Estado de Sao Paulo. 2. ed. Campinas: IAC; 1996.
 
 Sanchez, P. A. (2019). Properties and Management of Soils in the Tropics. Cambridge University Press.
 }
@@ -46,8 +46,9 @@ Fernando Aramburu Merlos
 
 
 \seealso{
-\code{\link{lr}, \link{ka_lr}, \link{co_lr}, \link{nu_lr}, \link{my_lr}, \link{gt_lr}}, 
+\code{\link{lr_ka}, \link{lr_co}, \link{lr_nu}, \link{lr_my}, \link{lr}, \link{lr_gt}, \link{convert}}, 
 }
+
 
 \examples{
 exch_Ca <- 2

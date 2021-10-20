@@ -1,11 +1,11 @@
 Package: limer
 Type: Package
-Title: Compiling agricultural research data 
+Title: Acidic soil management for agriculture
 Version: 0.1-1
 Depends: R (>= 3.5.0)
 Date: 2021-10-19
 Author: Fernando Aramburu Merlos
 Maintainer: <faramburumerlos@gmail.com>
-Description: functions for the GAIA project
+Description: Functions to compute liming recommendations and predict soil and yield responses in acid soils. Package developed for the GAIA project. 
 License: GPL (>=3)
 

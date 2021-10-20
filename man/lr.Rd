@@ -15,7 +15,7 @@ lr(method, units = "meq/100g", ...)
  
 \arguments{
   \item{method}{Method (formula) used to compute lime recommendation. One of \code{c("my", "ka", "co", "nu", "bv", "gt")}. See Details.}
-  \item{units}{Lime rate units of the output. If \code{units = "t/ha"} or \code{units = "kg/ha"} lime rate is transformed with function \code{\link{convert}} and soil bulk density (\code{sbd}) and soil depth (\code{sd}) must be specified.} 
+  \item{units}{Lime rate units of the output. If \code{units = "t/ha"} or \code{units = "kg/ha"} lime rate is transformed with function \code{\link{convert}} and soil bulk density (\code{SBD}) and soil depth (\code{SD}) must be specified.} 
   \item{...}{Additional arguments to be passed to the lower level functions.  \code{limer} tries hard to get all the required inputs for the given formula from the available data (see Details).}
 }
 
@@ -96,5 +96,11 @@ Recommended lime rate.
 
 
 \examples{
+TAS <- 20
+exch_ac <- 2:6
+ECEC <- 10
+clay <- 0.2
+
+lr(method = "my", TAS = TAS, exch_ac = exch_ac, ECEC = ECEC)
 
 }

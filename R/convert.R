@@ -1,8 +1,8 @@
-convert <- function(x, sbd, sd, to_t_ha = TRUE){
+convert <- function(x, SBD, SD, to_t_ha = TRUE){
   if(to_t_ha){
-    y <- (x * sd * sbd)/20
+    y <- (x * SD * SBD)/20
   } else {
-    y <- (x * 20)/(sd * sbd)
+    y <- (x * 20)/(SD * SBD)
   }
   return(y)
 }

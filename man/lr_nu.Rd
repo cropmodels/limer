@@ -38,7 +38,7 @@ Fernando Aramburu Merlos
 
 
 \seealso{
-\code{\link{lr}, \link{ka_lr}, \link{co_lr}, \link{my_lr}, \link{bv_lr}, \link{gt_lr}}, 
+\code{\link{lr_ka}, \link{lr_co}, \link{lr}, \link{lr_my}, \link{lr_bv}, \link{lr_gt}, \link{convert}}, 
 }
 
 \examples{

@@ -29,6 +29,7 @@ Soil response to increasing lime rate doses from incubation and field studies.
     \item{\code{clay}}{Clay fraction in the first horizon for the given soil type, derived from USDA soil series description}
     \item{\code{clay_l}}{Clay fraction lower limit in the first horizon for the given soil type, derived from USDA soil series description}
     \item{\code{clay_h}}{Clay fraction upper limit in the first horizon for the given soil type, derived from USDA soil series description}
+    \item{\code{method}}{Type of liming experiment: Soil incubation studies or Field experiments.}
   }
 }
 
@@ -55,7 +56,9 @@ USDA soil series decription: Portsmouth. https://soilseries.sc.egov.usda.gov/OSD
 }
 
 \examples{
-
+data(coch)
+head(coch)
+summary(coch)
 }
 
 \keyword{datasets}
