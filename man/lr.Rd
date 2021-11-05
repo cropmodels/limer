@@ -10,12 +10,13 @@ Lime rate recommendation
 }
 
 \usage{
-lr(method, units = "meq/100g", ...)
+lr(method, unit = "meq/100g", check_Ca = TRUE, ...)
 }
  
 \arguments{
   \item{method}{Method (formula) used to compute lime recommendation. One of \code{c("my", "ka", "co", "nu", "bv", "gt")}. See Details.}
-  \item{units}{Lime rate units of the output. If \code{units = "t/ha"} or \code{units = "kg/ha"} lime rate is transformed with function \code{\link{convert}} and soil bulk density (\code{SBD}) and soil depth (\code{SD}) must be specified.} 
+  \item{unit}{Lime rate unit of the output. If \code{unit = "t/ha"} or \code{unit = "kg/ha"} lime rate is transformed with function \code{\link{convert}} and soil bulk density (\code{SBD}) and soil depth (\code{SD}) must be specified.} 
+  \item{check_Ca}{logical. If \code{TRUE}, lime rate is adjusted to fix Calcium deficiencies. Lime rate is set to a min of 150 kg/ha when Ca saturation is lower than 25\%}
   \item{...}{Additional arguments to be passed to the lower level functions.  \code{limer} tries hard to get all the required inputs for the given formula from the available data (see Details).}
 }
 
@@ -101,6 +102,6 @@ exch_ac <- 2:6
 ECEC <- 10
 clay <- 0.2
 
-lr(method = "my", TAS = TAS, exch_ac = exch_ac, ECEC = ECEC)
+lr(method = "my", TAS = TAS, exch_ac = exch_ac, ECEC = ECEC, check_Ca = FALSE)
 
 }

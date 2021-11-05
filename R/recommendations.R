@@ -1,4 +1,4 @@
-lr <- function(method, units = "meq/100g", ...){
+lr <- function(method, unit = "meq/100g", check_Ca = TRUE, ...){
   
   l <- list(...)
   meth <- substr(tolower(method),1, 2)
@@ -16,9 +16,9 @@ lr <- function(method, units = "meq/100g", ...){
   }
   
 
-  if(units %in% c("kg/ha", "t/ha")){
+  if(unit %in% c("kg/ha", "t/ha") | check_Ca){
     if(is.null(l$SBD) | is.null(l$SD)){
-      stop("Soil bulk density (SBD) and lime incorporation depth (SD) are needed to estimate lime requirement in kg or t per ha")
+      stop("Soil bulk density (SBD) and lime incorporation depth (SD) are needed to estimate lime requirement in kg or t per ha and for Ca deficiencies check")
     }
   }
   
@@ -138,15 +138,29 @@ lr <- function(method, units = "meq/100g", ...){
     lime <- lr_gt(l$pH, l$OM, l$pot_ac, l$X, l$exch_Ca, l$exch_Mg)
   }
   
+  # check Ca deficiencies: 150kg/ha when Ca saturation < 25% (PS Book)
+  if(check_Ca){
+    if(is.null(l$exch_Ca)) stop("exch_Ca is needed to test for Ca deficiencies")
+    Ca_def <- exch_Ca/ECEC < 0.25
+    # 150 kg/ha to meq_Ca/ha 
+    Ca_lime <- convert(0.15, l$SBD, l$SD, to_t_ha = FALSE)
+    
+    # correct lime rate to avoid Calcium deficiencies
+    lime[Ca_def & lime < Ca_lime] <- Ca_lime
+    
+  }
+  
   
   # remove negative values (for subtraction methods where the Al Sat<l$TAS or pH < TpH)
   lime[lime < 0] <- 0
   
   # unit transformation
-  if(units %in% c("kg/ha", "t/ha")){
+  if(unit %in% c("kg/ha", "t/ha")){
     lime <- convert(lime, l$SBD, l$SD, to_t_ha = TRUE)
-    if(units == "kg/ha") lime <- lime * 1000
+    if(unit == "kg/ha") lime <- lime * 1000
   }
+  
+  
   
   return(lime)
 }
@@ -171,7 +185,11 @@ lr_ka <- function(exch_Al, lf = 1.5){
 lr_co <- function(TAS, exch_Al, exch_Ca, exch_Mg){
   ias <- 100 * exch_Al/(exch_Al + exch_Ca + exch_Mg)
   d_al <- exch_Al - (TAS/100 * (exch_Al + exch_Ca + exch_Mg))
-  lime <- ifelse(TAS > ias/3, 1.5 * d_al, 2 * d_al)
+  
+  #lime <- ifelse(TAS > ias/3, 1.5 * d_al, 2 * d_al)
+  lime <- 2 * d_al
+  lime[TAS > ias/3] <- 1.5 * d_al
+  
   return(lime)
 }
 
@@ -180,8 +198,18 @@ lr_co <- function(TAS, exch_Al, exch_Ca, exch_Mg){
 # lf is converted from original formula to get lime recommendation in meq/100g assuming that the original formula considered a soil depth of 15 cm and a soil bulk density of 1g/cm3
 
 lr_nu <- function(TAS, exch_ac, ECEC, clay){
-  lf <- ifelse(ECEC/clay < 4.5, 10/3, 26/15) 
-  lime <- lf * (exch_ac - ECEC * TAS/100) + pmax(10 * ((19 - TAS)/100 * ECEC), 0)
+  #lf <- ifelse(ECEC/clay < 4.5, 10/3, 26/15) 
+  lf <- rep(26/15, length(ECEC))
+  lf[ECEC/clay < 4.5] <- 10/3
+  
+  #lime <- lf * (exch_ac - ECEC * TAS/100) + pmax(10 * ((19 - TAS)/100 * ECEC), 0)
+  if(TAS >= 19){
+    lime <- lf * (exch_ac - ECEC * TAS/100)  
+  } else{
+    lime <- lf * (exch_ac - ECEC * TAS/100) + 10 * ((19 - TAS)/100 * ECEC)
+  }
+  
+  
   return(lime)
 }
 
@@ -189,7 +217,9 @@ lr_nu <- function(TAS, exch_ac, ECEC, clay){
 # Aramburu Merlos et al. xxx
 lr_my <- function(TAS, exch_ac, ECEC, a = 0.8, b = 0.2, clay = NULL){
   if(!is.null(clay)){
-    a <- pmin(0.5 + (ECEC/clay)/40, 0.8)
+    #a <- pmin(0.5 + (ECEC/clay)/40, 0.8)
+    a <- 0.5 + (ECEC/clay)/40
+    a[a > 0.8] <- 0.8
   }
   a.ac <- a * exch_ac
   TAS <- TAS/100 
@@ -251,11 +281,8 @@ lr_gt <- function(pH, OM, pot_ac, X = NULL, exch_Ca = NULL, exch_Mg = NULL){
   # select the min lr for each observation
   lime <- apply(m, 1, min, na.rm = T)
   # the lr cannot exceed the potential acidity of the soil
-  lime <- pmin(lime, pot_ac)
+  lime[lime > pot_ac] <- pot_ac
   
   return(lime)
 }
-
-
-
 
