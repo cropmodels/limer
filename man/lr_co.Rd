@@ -10,18 +10,17 @@ Empirical formula to estimate the lime rate required to alleviate or neutralize 
 }
 
 \usage{
-lr_co(TAS, exch_Al, exch_Ca, exch_Mg)
+lr_co(TAS, exch_ac, ECEC)
 }
 
 \arguments{
   \item{TAS}{Target aluminum saturation after liming (\%)}
-  \item{exch_Al}{Exchangeable Aluminum (meq/100g of soil)}
-  \item{exch_Ca}{Exchangeable Calcium (meq/100g of soil)}
-  \item{exch_Mg}{Exchangeable Magnesium (meq/100g of soil)}
+  \item{exch_ac}{Exchangeable Aluminum (meq/100g of soil)}
+  \item{ECEC}{Effective cation exchange capacity (meq/100g of soil)}
 }
 
 \details{
-Exchangeable aluminum, calcium, and magnesium as extracted with a neutral unbuffered salt (e.g. 1N KCl). Note that meq/100g of soil is the same as cmol of charge per kilogram of soil.  
+Exchangeable acidity and cation exchange capacity as extracted with a neutral unbuffered salt (e.g. 1N KCl). Note that meq/100g of soil is the same as cmol of charge per kilogram of soil. ECEC is equal to the sum of all exchangeable cations (e.g. Al, Ca, Mg, K, Na), but only Al, Ca and Mg were actually used in the original formula.   
 }
 
 \value{
@@ -44,13 +43,15 @@ Fernando Aramburu Merlos
 
 \examples{
 TAS <- 20
-exch_Al <- 2:6
+exch_ac <- 2:6
 exch_Ca <- 5:1
 exch_Mg <- 3
+ECEC <- exch_Ca + exch_Mg + exch_ac
 
-lr_co(TAS, exch_Al, exch_Ca, exch_Mg)
+
+lr_co(TAS, exch_ac, ECEC)
 
 TAS <- 5
-lr_co(TAS, exch_Al, exch_Ca, exch_Mg)
+lr_co(TAS, exch_ac, ECEC)
 
 }

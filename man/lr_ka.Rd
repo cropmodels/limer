@@ -10,16 +10,16 @@ Empirical formula to estimate the lime rate required to alleviate or neutralize 
 }
 
 \usage{
-lr_ka(exch_Al, lf = 1.5)
+lr_ka(exch_ac, lf = 1.5)
 }
 
 \arguments{
-  \item{exch_Al}{Exchangeable Aluminum (meq/100g of soil)}
+  \item{exch_ac}{Exchangeable acidity (meq/100g of soil)}
   \item{lf}{Lime factor (see details)}
 }
 
 \details{
-Exchangeable aluminum as extracted with a neutral unbuffered salt (e.g. 1N KCl). Note that meq/100g of soil is the same as cmol of charge per kilogram of soil. The default lime factor value is 1.5, but a lime factor of 2 is recommended for sensitive crops. 
+Exchangeable acidity as extracted with a neutral unbuffered salt (e.g. 1N KCl). Note that meq/100g of soil is the same as cmol of charge per kilogram of soil. The default lime factor value is 1.5, but a lime factor of 2 is recommended for sensitive crops. Kamprath original formula says exchangeable Al instead of acidity, but exchangeable acidity was the variable actually measured in their study.  
 }
 
 \value{
