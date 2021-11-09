@@ -172,11 +172,11 @@ lr_ka <- function(exch_ac, lf = 1.5){
 # Cochrane, et al. (1980).
 lr_co <- function(TAS, exch_ac, ECEC){
   ias <- 100 * exch_ac/ECEC
-  d_al <- exch_ac - (TAS/100 * ECEC)
   
   #lime <- ifelse(TAS > ias/3, 1.5 * d_al, 2 * d_al)
-  lime <- 2 * d_al
-  lime[ias/3 < TAS] <- 1.5 * d_al
+  lime <- 2 * (exch_ac - (TAS/100 * ECEC))
+  llf <- ias/3 < TAS 
+  lime[llf] <- 1.5 * (exch_ac[llf] - (TAS/100 * ECEC[llf]))
   
   return(lime)
 }
