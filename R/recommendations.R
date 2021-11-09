@@ -176,7 +176,8 @@ lr_co <- function(TAS, exch_ac, ECEC){
   #lime <- ifelse(TAS > ias/3, 1.5 * d_al, 2 * d_al)
   lime <- 2 * (exch_ac - (TAS/100 * ECEC))
   llf <- ias/3 < TAS 
-  lime[llf] <- 1.5 * (exch_ac[llf] - (TAS/100 * ECEC[llf]))
+  # do no subset each variable because TAS might be a single value or same length as other 2.
+  lime[llf] <- (1.5 * (exch_ac - (TAS/100 * ECEC)))[llf]
   
   return(lime)
 }
