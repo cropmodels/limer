@@ -184,11 +184,7 @@ lr_co <- function(TAS, exch_ac, ECEC){
 lr_nu <- function(TAS, exch_ac, ECEC, clay){
   #lf <- ifelse(ECEC/clay < 4.5, 10/3, 26/15) 
   #lime <- lf * (exch_ac - ECEC * TAS/100) + pmax(10 * ((19 - TAS)/100 * ECEC), 0)
-    
-  if(!is.vector(TAS) | length(TAS) > 1){
-    stop("only one TAS is accepted")
-  }
-  
+
   lime1 <- 26/15 * (exch_ac - ECEC * TAS/100)
   lclay <- ECEC/clay < 4.5
   # divide and multiply by different lf based on ECEC/clay
