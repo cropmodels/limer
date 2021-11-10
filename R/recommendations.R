@@ -120,8 +120,8 @@ lr <- function(exch_ac = NULL, ECEC = NULL, method,
     lime <- lr_gt(l$pH, l$OM, l$pot_ac, l$X, l$exch_Ca, l$exch_Mg)
   }
   
-  # remove negative values (for subtraction methods where the Al Sat<l$TAS or pH < TpH)
-  lime <- pmax(lime, 0)
+  # remove negative values 
+  lime[lime < 0] <- 0
   
   # unit transformation
   if(unit %in% c("kg/ha", "t/ha")){
@@ -133,22 +133,17 @@ lr <- function(exch_ac = NULL, ECEC = NULL, method,
   if(check_Ca){
     
     Ca_def <- l$exch_Ca/ECEC < 0.25
-    Ca_def[is.na(Ca_def)] <- FALSE # NAs are not allowed in subscripted assignments
     
     if(unit == "kg/ha"){
-      lime[Ca_def] <- pmax(lime[Ca_def], 150)
+      lime[Ca_def & lime < 150] <- 150
     } else if(unit == "t/ha"){
-      lime[Ca_def] <- pmax(lime[Ca_def], 0.15)
+      lime[Ca_def & lime < 0.15] <- 0.15
     } else {
       Ca_lime <- convert(0.15, SBD, SD, to_t_ha = FALSE)
-      lime[Ca_def] <- pmax(lime, Ca_lime)[Ca_def]
+      i <- Ca_def & lime < Ca_lime
+      lime[i] <- Ca_lime[i]
     }
-    
-    
   }
-  
-  
-  
   return(lime)
 }
 
@@ -174,10 +169,10 @@ lr_co <- function(TAS, exch_ac, ECEC){
   
   #lime <- ifelse(TAS > ias/3, 1.5 * d_al, 2 * d_al)
   lime <- 2 * (exch_ac - (TAS/100 * ECEC))
-  llf <- ias/3 < TAS 
-  llf[is.na(llf)] <- FALSE  # NAs are not allowed in subscripted assignments
-  # do no subset each variable because TAS might be a single value or same length as other 2.
-  lime[llf] <- (1.5 * (exch_ac - (TAS/100 * ECEC)))[llf]
+  #lf is 1.5 when TAS is lower than IAS/3, it is 2 otherwise
+  llf <- TAS > ias/3  
+  # changing the lf from 2 to 1.5 is he same as multiplying by 0.75 (1.5/2)
+  lime[llf] <- lime[llf] * 0.75 
   
   return(lime)
 }
@@ -190,17 +185,21 @@ lr_nu <- function(TAS, exch_ac, ECEC, clay){
   #lf <- ifelse(ECEC/clay < 4.5, 10/3, 26/15) 
   #lime <- lf * (exch_ac - ECEC * TAS/100) + pmax(10 * ((19 - TAS)/100 * ECEC), 0)
     
-  if(!is.vector(TAS) & length(TAS) > 1){
+  if(!is.vector(TAS) | length(TAS) > 1){
     stop("only one TAS is accepted")
   }
   
-  lime <- 26/15 * (exch_ac - ECEC * TAS/100)
+  lime1 <- 26/15 * (exch_ac - ECEC * TAS/100)
   lclay <- ECEC/clay < 4.5
-  lclay[is.na(lclay)] <- FALSE # NAs are not allowed in subscripted assignments
-  lime[lclay] <- lime * (10/3) / (26/15)
-  if(TAS >= 19){
-    lime <- lime + 10 * ((19 - TAS)/100 * ECEC)
-  }
+  # divide and multiply by different lf based on ECEC/clay
+  lime1[lclay] <- lime1[lclay] * (10/3) / (26/15)
+  
+  # second part of the formula, which has to be positive
+  lime2 <- 10 * ((19 - TAS)/100 * ECEC)
+  lime2[lime2 < 0] <- 0
+  # add first and second part
+  lime <- lime1 + lime2
+  
   return(lime)
 }
 
@@ -208,9 +207,8 @@ lr_nu <- function(TAS, exch_ac, ECEC, clay){
 # Aramburu Merlos et al. xxx
 lr_my <- function(TAS, exch_ac, ECEC, a = 0.8, b = 0.2, clay = NULL){
   if(!is.null(clay)){
-    a <- pmin(0.5 + (ECEC/clay)/40, 0.8)
-    #a <- 0.5 + (ECEC/clay)/40
-    #a[a > 0.8] <- 0.8
+    a <- 0.5 + (ECEC/clay)/40
+    a[a > 0.8] <- 0.8
   }
   TAS <- TAS/100 
   in.sqrt <- (a*exch_ac)^2 - 4*a*b*exch_ac * (TAS - 1) * (TAS*ECEC - exch_ac)
