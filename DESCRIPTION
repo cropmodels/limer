@@ -8,4 +8,7 @@ Author: Fernando Aramburu Merlos
 Maintainer: <faramburumerlos@gmail.com>
 Description: Functions to compute liming recommendations and predict soil and yield responses in acid soils. Package developed for the GAIA project. 
 License: GPL (>=3)
-
+Suggests: 
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr
