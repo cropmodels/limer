@@ -141,6 +141,7 @@ lr <- function(exch_ac = NULL, ECEC = NULL, method,
     } else {
       Ca_lime <- convert(0.15, SBD, SD, to_t_ha = FALSE)
       i <- Ca_def & lime < Ca_lime
+      i <- i & !is.na(i)
       lime[i] <- Ca_lime[i]
     }
   }
