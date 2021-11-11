@@ -171,6 +171,7 @@ lr_co <- function(TAS, exch_ac, ECEC){
   lime <- 2 * (exch_ac - (TAS/100 * ECEC))
   #lf is 1.5 when TAS is lower than IAS/3, it is 2 otherwise
   llf <- TAS > ias/3  
+  llf <- llf & !is.na(llf) # set NA to F
   # changing the lf from 2 to 1.5 is he same as multiplying by 0.75 (1.5/2)
   lime[llf] <- lime[llf] * 0.75 
   
@@ -188,7 +189,8 @@ lr_nu <- function(TAS, exch_ac, ECEC, clay){
   lime1 <- 26/15 * (exch_ac - ECEC * TAS/100)
   lclay <- ECEC/clay < 4.5
   # divide and multiply by different lf based on ECEC/clay
-  lime1[lclay] <- lime1[lclay] * (10/3) / (26/15)
+  lime1[lclay & !is.na(lclay)] <- lime1[lclay & !is.na(lclay)] * (25/13)
+  lime1[is.na(lclay)] <- NA
   
   # second part of the formula, which has to be positive
   lime2 <- 10 * ((19 - TAS)/100 * ECEC)
