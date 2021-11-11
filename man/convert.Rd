@@ -5,7 +5,7 @@
 Convert lime rate units
 }
 \description{
-Unit convertion of lime rates from meq of Ca per 100g of soils to metric tons per hectare or vice versa. Note that meq/100g is the same as cmol_c/kg.
+Unit conversion of lime rates from meq of Ca per 100g of soils to metric tons per hectare or vice versa. Note that meq/100g is the same as cmol_c/kg.
 }
 
 \usage{
