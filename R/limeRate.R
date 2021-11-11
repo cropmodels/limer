@@ -7,7 +7,8 @@ setMethod("limeRate", signature(x="SpatRaster"),
 		#lapp(x, fun=lr, usenames=TRUE, method=method, unit=unit, check_Ca = check_Ca)
 
 		# for now:
-		limeRate(values(x), method=method, unit=unit, check_Ca=check_Ca)	
+		out <- rast(x)
+		setValues(out, limeRate(values(x), method=method, unit=unit, check_Ca=check_Ca)	)
 	}
 )
 
