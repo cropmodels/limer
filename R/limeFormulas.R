@@ -1,6 +1,10 @@
-lr <- function(method, unit = "meq/100g", check_Ca = TRUE, ...){
+.lr <- function(method, unit = "meq/100g", check_Ca = TRUE, SD = 20,
+                exch_ac = NULL, ECEC = NULL, SBD = NULL, 
+                exch_Al = NULL, exch_H = NULL, 
+                exch_Ca = NULL, exch_Mg = NULL, exch_K = NULL, exch_Na = NULL,
+                CEC_7 = NULL, pot_ac = NULL, pH = NULL, OM = NULL, clay = NULL,
+                TAS = NULL, target_Ve = NULL, X = NULL, crop_type = NULL) {
   
-  l <- list(...)
   meth <- substr(tolower(method), 1, 2)
   
   # check inputs.  ########
@@ -17,64 +21,62 @@ lr <- function(method, unit = "meq/100g", check_Ca = TRUE, ...){
   }
   
   if(unit %in% c("kg/ha", "t/ha") | check_Ca){
-    if(is.null(l$SBD) | is.null(l$SD)){
-      stop("Soil bulk density (SBD) and lime incorporation depth (SD) are needed to estimate lime requirement in kg or t per ha and for Ca deficiencies check")
+    if(is.null(SBD)){
+      stop("Soil bulk density (SBD) is needed to estimate lime requirement in kg or t per ha and for Ca deficiencies check")
     }
   }
   
-  if(check_Ca & is.null(l$exch_Ca)){
+  if(check_Ca & is.null(exch_Ca)){
     stop("exch_Ca is needed to test for Ca deficiencies")
   }
   
   ## Flexibility ------
-  if(is.null(l$exch_ac)){
-    if(is.null(l$exch_Al)){
+  if(is.null(exch_ac)){
+    if(is.null(exch_Al)){
       stop("Either exchangeable acidity or exchangeable Al should be provided")
     } else {
-      if(!is.null(l$exch_H)){
-        l$exch_ac <- l$exch_Al + l$exch_H  
+      if(!is.null(exch_H)){
+        exch_ac <- exch_Al + exch_H  
       } else {
-        l$exch_ac <- l$exch_Al
+        exch_ac <- exch_Al
       }
     }
   }  
   
-  if(is.null(l$ECEC) & meth != "ka"){
-    nl <- names(l)
-    ib <- which(grepl("exch", nl) & !grepl("exch_Al", nl) & !grepl("exch_H", nl))
-    if(length(ib) == 0){
-      stop("exchangeable bases values should be provided when l$ECEC is missing")
+  if(is.null(ECEC) & meth != "ka"){
+    if(is.null(exch_Ca) & is.null(exch_Mg) & is.null(exch_K) & is.null(exch_Na)){
+      stop("exchangeable bases values should be provided when ECEC is missing")
     }
-    lb <- l[ib]
-    l$ECEC <- Reduce(`+`, lb) + l$exch_ac
+    m <- cbind(exch_Ca, exch_Mg, exch_K, exch_Na)
+    ECEC <- rowSums(m) + exch_ac
   }
   
   if(meth %in% c("bv", "br", "gt", "te")){
-    l$exch_bases <- l$ECEC - l$exch_ac
-    if(is.null(l$CEC_7) & is.null(l$pot_ac)){
+    exch_bases <- ECEC - exch_ac
+    if(is.null(CEC_7) & is.null(pot_ac)){
       stop("CEC_7 or pot_ac is needed for this method")
     }
-    if(meth %in% c("bv", "br") & is.null(l$CEC_7) & !is.null(l$pot_ac)){
-      l$CEC_7 <- l$pot_ac + l$exch_bases
+    if(meth %in% c("bv", "br") & is.null(CEC_7) & !is.null(pot_ac)){
+      CEC_7 <- pot_ac + exch_bases
     }
-    if(meth %in% c("gt", "te") & !is.null(l$pot_ac) & is.null(l$CEC_7)){
-      l$pot_ac <- l$CEC_7 - l$exch_bases
+    if(meth %in% c("gt", "te") & !is.null(pot_ac) & is.null(CEC_7)){
+      pot_ac <- CEC_7 - exch_bases
     }
   }
 
   ## Specific ----
   if(meth %in% c("my", "co", "nu")){
-    if(is.null(l$TAS)) stop("TAS is needed for this method")
+    if(is.null(TAS)) stop("TAS is needed for this method")
   }
   
   if(meth %in% c("bv","br")){
-    if(is.null(l$target_Ve) & is.null(l$crop_type)){
+    if(is.null(target_Ve) & is.null(crop_type)){
       stop("target base saturation (target_Ve) or crop type are needed for this method")
     }
   }
   
   if(meth %in% c("gt", "te")){
-    if(is.null(l$pH)|is.null(l$OM)|is.null(l$pot_ac)){
+    if(is.null(pH)|is.null(OM)|is.null(pot_ac)){
       stop("pH, OM, and pot_ac or CEC_7 are needed for Goncalvez Texeira method")
     }
   }
@@ -84,35 +86,35 @@ lr <- function(method, unit = "meq/100g", check_Ca = TRUE, ...){
   
   if(meth == "ka"){
     # message("using Kamprath (1970) method")
-    lime <- .lr_ka(exch_ac = l$exch_ac)
+    lime <- .lr_ka(exch_ac = exch_ac)
   }
   
   if(meth == "co"){
     # message("using Cochrane et al. (1980) method")
-    lime <- .lr_co(exch_ac = l$exch_ac, ECEC = l$ECEC, TAS = l$TAS)
+    lime <- .lr_co(exch_ac = exch_ac, ECEC = ECEC, TAS = TAS)
   }
   
   if(meth == "nu"){
     # message("using NuMaSS method")
-    lime <- .lr_nu(exch_ac = l$exch_ac, ECEC = l$ECEC, TAS = l$TAS, clay = l$clay)
+    lime <- .lr_nu(exch_ac = exch_ac, ECEC = ECEC, TAS = TAS, clay = clay)
   }
   
   if(meth == "my"){
     # message("using my method")
-    lime <- .lr_my(exch_ac = l$exch_ac, ECEC = l$ECEC, TAS = l$TAS, clay = l$clay)
+    lime <- .lr_my(exch_ac = exch_ac, ECEC = ECEC, TAS = TAS, clay = clay)
   }
   
     
   if(meth %in% c("bv","br")){
     # message("using Brazil V method")
-    lime <- .lr_bv(exch_bases = l$exch_bases, CEC_7 = l$CEC_7, 
-                   target_Ve = l$target_Ve, crop_type = l$crop_type)
+    lime <- .lr_bv(exch_bases = exch_bases, CEC_7 = CEC_7, 
+                   target_Ve = target_Ve, crop_type = crop_type)
   }
   
   if(meth %in% c("te", "gt")){
     # message("using Goncalvez Teixeira method")
-    lime <- .lr_gt(pH = l$pH, OM = l$OM, pot_ac = l$pot_ac, X = l$X, 
-                   exch_Ca = l$exch_Ca, exch_Mg = l$exch_Mg)
+    lime <- .lr_gt(pH = pH, OM = OM, pot_ac = pot_ac, X = X, 
+                   exch_Ca = exch_Ca, exch_Mg = exch_Mg)
   }
   
   # Final steps #########
@@ -122,13 +124,13 @@ lr <- function(method, unit = "meq/100g", check_Ca = TRUE, ...){
   
   # unit transformation
   if(unit %in% c("kg/ha", "t/ha")){
-    lime <- convert(lime, l$SBD, l$SD, to_t_ha = TRUE)
+    lime <- convert(lime, SBD = SBD, SD = SD, to_t_ha = TRUE)
     if(unit == "kg/ha") lime <- lime * 1000
   }
   
   if(check_Ca){
-    lime <- .ca_def(lime = lime, exch_Ca = l$exch_Ca, ECEC = l$ECEC, 
-                    unit = unit, SBD = l$SBD, SD = l$SD)
+    lime <- .ca_def(lime = lime, exch_Ca = exch_Ca, ECEC = ECEC, 
+                    unit = unit, SBD = SBD, SD = SD)
   }
   return(lime)
 }
