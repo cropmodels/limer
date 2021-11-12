@@ -55,6 +55,5 @@ values(r) <- as.matrix(rbind(x, x[1,]))
 names(r) <- names(x)
 rr <- limeRate(r, method = "my", check_Ca = FALSE)
 values(rr)
-
 }
 

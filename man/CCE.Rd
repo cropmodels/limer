@@ -22,6 +22,5 @@ CCE()
   \item{CCE}{Calcium carbonate equivalent in \%}
   \item{fine}{fraction smaller than 60-mesh size}
   \item{medium}{fraction between between 8- and 60-mesh size}
-  \item{depth}{depth of incorporaton in the soil (cm)}
 }
 
