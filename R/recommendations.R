@@ -1,13 +1,11 @@
-lr <- function(exch_ac = NULL, ECEC = NULL, method, 
-               unit = "meq/100g", SBD = NULL, SD = NULL, 
-               check_Ca = TRUE, ...){
+lr <- function(method, unit = "meq/100g", check_Ca = TRUE, ...){
   
   l <- list(...)
   meth <- substr(tolower(method), 1, 2)
   
   # check inputs.  ########
-  # Add flexibility for exchangeable Al and acidity.
   
+  ## General -----
   av.meth <- c("my", "ka", "co", "nu", "bv", "br", "gt", "te")
   
   if(length(meth) > 1){
@@ -18,9 +16,8 @@ lr <- function(exch_ac = NULL, ECEC = NULL, method,
     stop("unrecognized method")
   }
   
-  
   if(unit %in% c("kg/ha", "t/ha") | check_Ca){
-    if(is.null(SBD) | is.null(SD)){
+    if(is.null(l$SBD) | is.null(l$SD)){
       stop("Soil bulk density (SBD) and lime incorporation depth (SD) are needed to estimate lime requirement in kg or t per ha and for Ca deficiencies check")
     }
   }
@@ -29,121 +26,109 @@ lr <- function(exch_ac = NULL, ECEC = NULL, method,
     stop("exch_Ca is needed to test for Ca deficiencies")
   }
   
-  if(is.null(exch_ac)){
+  ## Flexibility ------
+  if(is.null(l$exch_ac)){
     if(is.null(l$exch_Al)){
       stop("Either exchangeable acidity or exchangeable Al should be provided")
     } else {
       if(!is.null(l$exch_H)){
-        exch_ac <- l$exch_Al + l$exch_H  
+        l$exch_ac <- l$exch_Al + l$exch_H  
       } else {
-        exch_ac <- l$exch_Al
+        l$exch_ac <- l$exch_Al
       }
     }
   }  
   
-  if(is.null(ECEC)){
+  if(is.null(l$ECEC) & meth != "ka"){
     nl <- names(l)
     ib <- which(grepl("exch", nl) & !grepl("exch_Al", nl) & !grepl("exch_H", nl))
     if(length(ib) == 0){
-      stop("exchangeable bases values should be provided when ECEC is missing")
+      stop("exchangeable bases values should be provided when l$ECEC is missing")
     }
     lb <- l[ib]
-    ECEC <- Reduce(`+`, lb) + exch_ac
+    l$ECEC <- Reduce(`+`, lb) + l$exch_ac
   }
   
-  if(is.null(l$CEC_7) & !is.null(l$pot_ac)){
-    l$CEC_7 <- ECEC - exch_ac + l$pot_ac
+  if(meth %in% c("bv", "br", "gt", "te")){
+    l$exch_bases <- l$ECEC - l$exch_ac
+    if(is.null(l$CEC_7) & is.null(l$pot_ac)){
+      stop("CEC_7 or pot_ac is needed for this method")
+    }
+    if(meth %in% c("bv", "br") & is.null(l$CEC_7) & !is.null(l$pot_ac)){
+      l$CEC_7 <- l$pot_ac + l$exch_bases
+    }
+    if(meth %in% c("gt", "te") & !is.null(l$pot_ac) & is.null(l$CEC_7)){
+      l$pot_ac <- l$CEC_7 - l$exch_bases
+    }
+  }
+
+  ## Specific ----
+  if(meth %in% c("my", "co", "nu")){
+    if(is.null(l$TAS)) stop("TAS is needed for this method")
   }
   
-  if(is.null(l$pot_ac) & !is.null(l$CEC_7)){
-    l$pot_ac <- l$CEC_7 - (ECEC - exch_ac)
+  if(meth %in% c("bv","br")){
+    if(is.null(l$target_Ve) & is.null(l$crop_type)){
+      stop("target base saturation (target_Ve) or crop type are needed for this method")
+    }
+  }
+  
+  if(meth %in% c("gt", "te")){
+    if(is.null(l$pH)|is.null(l$OM)|is.null(l$pot_ac)){
+      stop("pH, OM, and pot_ac or CEC_7 are needed for Goncalvez Texeira method")
+    }
   }
   
   
   # compute lime requirement by method ######
   
-  if(meth == "my"){
-    message("using my method")
-    if(is.null(l$TAS)) stop("TAS is needed for my method")
-    if(is.null(l$a)) l$a <- 0.8
-    if(is.null(l$b)) l$b <- 0.2
-    lime <- lr_my(l$TAS, exch_ac, ECEC, a = l$a, b = l$b, clay = l$clay)
-  }
-  
-  
   if(meth == "ka"){
-    message("using Kamprath (1970) method")
-    lime <- lr_ka(exch_ac)
+    # message("using Kamprath (1970) method")
+    lime <- .lr_ka(exch_ac = l$exch_ac)
   }
-  
   
   if(meth == "co"){
-    message("using Cochrane (1980) method")
-    if(is.null(l$TAS)) stop("TAS is needed for Cochrane method")
-    lime <- lr_co(l$TAS, exch_ac, ECEC)
+    # message("using Cochrane et al. (1980) method")
+    lime <- .lr_co(exch_ac = l$exch_ac, ECEC = l$ECEC, TAS = l$TAS)
   }
-  
   
   if(meth == "nu"){
-    message("using NuMaSS method")
-    if(is.null(l$TAS)) stop("TAS is needed for NuMaSS method")
-    if(is.null(l$clay)){
-      warning("no clay data. High ECEC/clay is assumed")
-      l$clay <- 0.01
-    }
-    lime <- lr_nu(l$TAS, exch_ac, ECEC, l$clay)
+    # message("using NuMaSS method")
+    lime <- .lr_nu(exch_ac = l$exch_ac, ECEC = l$ECEC, TAS = l$TAS, clay = l$clay)
   }
   
+  if(meth == "my"){
+    # message("using my method")
+    lime <- .lr_my(exch_ac = l$exch_ac, ECEC = l$ECEC, TAS = l$TAS, clay = l$clay)
+  }
   
+    
   if(meth %in% c("bv","br")){
-    message("using Brazil V method")
-    if(is.null(l$CEC_7)){
-      stop("CEC (at pH 7) is needed for Brazil V method")
-    }
-    if(is.null(l$target_Ve) & is.null(l$crop_type)){
-      warning("no target base saturation or crop type provided for Brazil V method. A cereal crop type with a target base saturation of 50% was assumed")
-      l$target_Ve <- 50
-    }
-    exch_bases <- ECEC - exch_ac
-    lime <- lr_bv(exch_bases, l$CEC_7, l$target_Ve, l$crop_type)
+    # message("using Brazil V method")
+    lime <- .lr_bv(exch_bases = l$exch_bases, CEC_7 = l$CEC_7, 
+                   target_Ve = l$target_Ve, crop_type = l$crop_type)
   }
-  
   
   if(meth %in% c("te", "gt")){
-    message("using Goncalvez Teixeira method")
-    if(is.null(l$pH)|is.null(l$OM)|is.null(l$pot_ac)){
-      stop("pH, OM and pot_ac are needed for Goncalvez Texeira method")
-    }
-    if(!is.vector(l$pH)){
-      stop("Goncalvez Teiexeira method only accepts vector values")
-    }
-    lime <- lr_gt(l$pH, l$OM, l$pot_ac, l$X, l$exch_Ca, l$exch_Mg)
+    # message("using Goncalvez Teixeira method")
+    lime <- .lr_gt(pH = l$pH, OM = l$OM, pot_ac = l$pot_ac, X = l$X, 
+                   exch_Ca = l$exch_Ca, exch_Mg = l$exch_Mg)
   }
+  
+  # Final steps #########
   
   # remove negative values 
   lime[lime < 0] <- 0
   
   # unit transformation
   if(unit %in% c("kg/ha", "t/ha")){
-    lime <- convert(lime, SBD, SD, to_t_ha = TRUE)
+    lime <- convert(lime, l$SBD, l$SD, to_t_ha = TRUE)
     if(unit == "kg/ha") lime <- lime * 1000
   }
   
-  # check Ca deficiencies: 150kg/ha when Ca saturation < 25% (PS Book)
   if(check_Ca){
-    
-    Ca_def <- l$exch_Ca/ECEC < 0.25
-    
-    if(unit == "kg/ha"){
-      lime[Ca_def & lime < 150] <- 150
-    } else if(unit == "t/ha"){
-      lime[Ca_def & lime < 0.15] <- 0.15
-    } else {
-      Ca_lime <- convert(0.15, SBD, SD, to_t_ha = FALSE)
-      i <- Ca_def & lime < Ca_lime
-      i <- i & !is.na(i)
-      lime[i] <- Ca_lime[i]
-    }
+    lime <- .ca_def(lime = lime, exch_Ca = l$exch_Ca, ECEC = l$ECEC, 
+                    unit = unit, SBD = l$SBD, SD = l$SD)
   }
   return(lime)
 }
@@ -158,24 +143,18 @@ lr <- function(exch_ac = NULL, ECEC = NULL, method,
 # individual formulas
 
 # Kamprath (1970) 
-lr_ka <- function(exch_ac, lf = 1.5){
+.lr_ka <- function(exch_ac, lf = 1.5){
   lime <- exch_ac * lf
   return(lime)
 }
 
 
 # Cochrane, et al. (1980).
-lr_co <- function(TAS, exch_ac, ECEC){
+.lr_co <- function(exch_ac, ECEC, TAS){
   ias <- 100 * exch_ac/ECEC
-  
-  #lime <- ifelse(TAS > ias/3, 1.5 * d_al, 2 * d_al)
-  lime <- 2 * (exch_ac - (TAS/100 * ECEC))
-  #lf is 1.5 when TAS is lower than IAS/3, it is 2 otherwise
-  llf <- TAS > ias/3  
-  llf <- llf & !is.na(llf) # set NA to F
-  # changing the lf from 2 to 1.5 is he same as multiplying by 0.75 (1.5/2)
-  lime[llf] <- lime[llf] * 0.75 
-  
+  d_ac <- exch_ac - (TAS/100 * ECEC)
+  llf <- TAS > ias/3
+  lime <- ifelse(llf, 1.5 * d_ac, 2 * d_ac)
   return(lime)
 }
 
@@ -183,45 +162,45 @@ lr_co <- function(TAS, exch_ac, ECEC){
 
 # lf is converted from original formula to get lime recommendation in meq/100g assuming that the original formula considered a soil depth of 15 cm and a soil bulk density of 1g/cm3
 
-lr_nu <- function(TAS, exch_ac, ECEC, clay){
-  #lf <- ifelse(ECEC/clay < 4.5, 10/3, 26/15) 
-  #lime <- lf * (exch_ac - ECEC * TAS/100) + pmax(10 * ((19 - TAS)/100 * ECEC), 0)
-
-  lime1 <- 26/15 * (exch_ac - ECEC * TAS/100)
-  lclay <- ECEC/clay < 4.5
-  # divide and multiply by different lf based on ECEC/clay
-  lime1[lclay & !is.na(lclay)] <- lime1[lclay & !is.na(lclay)] * (25/13)
-  lime1[is.na(lclay)] <- NA
-  
+.lr_nu <- function(exch_ac, ECEC, TAS, clay = NULL){
+  # normal lf (high clay activity)
+  lime1 <- 26/15 * exch_ac - (TAS/100 * ECEC)
+  #if clay data is available, modify lf when clay activity is very low
+  if(!is.null(clay)){
+    lclay <- ECEC/clay < 4.5 & !is.na(clay) & !is.na(ECEC)
+    lime1[lclay] <- lime1[lclay] * 25/13    
+  }
   # second part of the formula, which has to be positive
   lime2 <- 10 * ((19 - TAS)/100 * ECEC)
   lime2[lime2 < 0] <- 0
   # add first and second part
   lime <- lime1 + lime2
-  
   return(lime)
 }
 
 
 # Aramburu Merlos et al. xxx
-lr_my <- function(TAS, exch_ac, ECEC, a = 0.8, b = 0.2, clay = NULL){
-  if(!is.null(clay)){
+.lr_my <- function(exch_ac, ECEC, TAS, clay = NULL){
+  b <- 0.2
+  if(is.null(clay)){
+  a <- 0.8  
+  } else {
     a <- 0.5 + (ECEC/clay)/40
     a[a > 0.8] <- 0.8
   }
-  TAS <- TAS/100 
-  in.sqrt <- (a*exch_ac)^2 - 4*a*b*exch_ac * (TAS - 1) * (TAS*ECEC - exch_ac)
+  a.ac <- a * exch_ac
+  tas <- TAS/100
+  in.sqrt <- a.ac^2 - 4*b*a.ac * (tas - 1) * (tas*ECEC - exch_ac)
   # to do: find a solution by optimization when in.sqrt is negative (?)
   # in.sqrt[in.sqrt < 0] <- 0
-  lime <- exch_ac * ((a*exch_ac - sqrt(in.sqrt)) / (2*a*b*exch_ac * (1 - TAS)))
+  lime <- exch_ac * ((a.ac - sqrt(in.sqrt)) / (2*b*a.ac * (1 - tas)))
   return(lime)
 }
 
 
-
 # Brazil V method (van Raij 1996) 
 
-lr_bv <- function(exch_bases, CEC_7, target_Ve = NULL, crop_type = "cereal"){
+.lr_bv <- function(exch_bases, CEC_7, target_Ve = NULL, crop_type){
   if(is.null(target_Ve)){
     Ve <- data.frame(ct = c("pasture", "cereal", "legume", "vegetable", "fruit"), 
                      tVe = c(40, 50, 50, 70, 70))
@@ -231,15 +210,14 @@ lr_bv <- function(exch_bases, CEC_7, target_Ve = NULL, crop_type = "cereal"){
       stop("unrecognized crop type. Crop type can be pasture, cereal, legume, vegetable, or fruit.")
     }
   }
-  
-  V <- 100 * (exch_bases) / CEC_7
-  lime <- CEC_7 * (target_Ve - V)/100
+  Ve <- target_Ve/100
+  lime <- CEC_7 * Ve - exch_bases
   return(lime)  
 }
 
 
 # Goncalvez Teixeira et al., (2020)
-lr_gt <- function(pH, OM, pot_ac, X = NULL, exch_Ca = NULL, exch_Mg = NULL){
+.lr_gt <- function(pH, OM, pot_ac, X = NULL, exch_Ca = NULL, exch_Mg = NULL){
   om5 <- 0.0699 * (((5.8 - pH)* OM)^0.9225)
   ac5 <- 0.3750 * (((5.8 - pH)* pot_ac)^0.9127)
   om6 <- 0.1059 * (((6.0 - pH)* OM)^0.8729)
@@ -268,7 +246,20 @@ lr_gt <- function(pH, OM, pot_ac, X = NULL, exch_Ca = NULL, exch_Mg = NULL){
   lime <- apply(m, 1, min, na.rm = T)
   # the lr cannot exceed the potential acidity of the soil
   lime[lime > pot_ac] <- pot_ac
-  
   return(lime)
 }
 
+# check Ca deficiencies: 150kg/ha when Ca saturation < 25% (PS Book)
+.ca_def <- function(lime, exch_Ca, ECEC, unit, SBD, SD){
+  def <- exch_Ca/ECEC < 0.25 & !is.na(exch_Ca) & !is.na(ECEC)
+  if(unit == "kg/ha"){
+    dose <- 150
+  } else if(unit == "t/ha"){
+    dose <- 0.15
+  } else {
+    dose <- convert(0.15, SBD, SD, to_t_ha = FALSE)[def]
+    dose[is.na(dose)] <- 0 # if dose is.na, keep current lime rate (including NAs)
+  }
+  lime[def] <- pmax(lime[def], dose)
+  return(lime)
+}
