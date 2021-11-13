@@ -120,21 +120,24 @@ Teixeira, W. G., Victor Hugo Alvarez, V., & Neves, J. C. L. (2020). New methods 
 
 
 \examples{
-TAS <- 20
-exch_ac <- c(2:5,NA)
-ECEC <- 10
-clay <- 0.2
+x <- data.frame(exch_ac = c(2:4,NA), ECEC = 5)
 
-lr(method = "my", TAS = TAS, exch_ac = exch_ac, ECEC = ECEC, check_Ca = FALSE)
+limeRate(x, method = "ka", check_Ca = FALSE)
+limeRate(x, method = "co", check_Ca = FALSE, TAS = 15)
+limeRate(x, method = "my", check_Ca = FALSE, TAS = 15)
 
-x <- data.frame(TAS=TAS, exch_ac=exch_ac, ECEC =ECEC, clay=clay)
-limeRate(x, method = "my", check_Ca = FALSE)
+x$CEC_7 <- 10
+limeRate(x, method = "bv", check_Ca = FALSE, target_Ve = 50)
 
 library(terra)
-r <- rast(nrow=2, ncol=3, nl=4)
-values(r) <- as.matrix(rbind(x, x[1,]))
+r <- rast(nrow=2, ncol=2, nl=3)
+values(r) <- as.matrix(x)
 names(r) <- names(x)
-rr <- limeRate(r, method = "my", check_Ca = FALSE)
+rr <- limeRate(r, method = "ka", check_Ca = FALSE)
+values(rr)
+rr <- limeRate(r, method = "co", check_Ca = FALSE, TAS = 15)
+values(rr)
+rr <- limeRate(r, method = "my", check_Ca = FALSE, TAS = 15)
 values(rr)
 }
 
