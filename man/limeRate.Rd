@@ -12,8 +12,12 @@ Compute lime rate recommendations using one of several methods.
 }
 
 \usage{
-limeRate(x, method, unit = "meq/100g", check_Ca=TRUE, SD = 20,
+\S4method{limeRate}{SpatRaster}(x, method, unit = "meq/100g", check_Ca=TRUE, SD = 20,
 	         TAS = NULL, target_Ve = NULL, X = NULL, crop_type = NULL)
+
+\S4method{limeRate}{data.frame}(x, method, unit = "meq/100g", check_Ca=TRUE, SD = 20,
+	         TAS = NULL, target_Ve = NULL, X = NULL, crop_type = NULL)
+
 }
 
 

@@ -431,7 +431,7 @@ Moreover, distinguishing between acidity components (H^+^, Al^+3^, Fe^+2^) is no
 
 Therefore, most likely all exch. Al^+3^ reported in the old literature (without mentioning H^+^) are measures of exchangeable acidity (but primarily caused by Al) as it is very difficult to discern between acidity components (Bohn et al., 2002). In his PhD thesis, Jose Salinas states this clearly:
 
-> *"Exhcangeable acidity was determined by titration of the filtrate with 0.01N NaOH using bromthymol blue as an indicator. Exchangeable acidity was considered to be due to exchangeable Al (Lin and Coleman, 1960)"* (pp 79)
+> *"Exchangeable acidity was determined by titration of the filtrate with 0.01N NaOH using bromthymol blue as an indicator. Exchangeable acidity was considered to be due to exchangeable Al (Lin and Coleman, 1960)"* (pp 79)
 
-For this reason, in the `limer` pakcage, all lime recommendation formulas based on Aluminum saturation require exchangeable acidity instead of exchangeable aluminum. 
+For this reason, in the `limer` package, all lime recommendation formulas based on Aluminum saturation require exchangeable acidity instead of exchangeable aluminum. 
 
