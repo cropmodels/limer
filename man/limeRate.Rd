@@ -12,8 +12,13 @@ Compute lime rate recommendations using one of several methods.
 }
 
 \usage{
-limeRate(x, method, unit = "meq/100g", check_Ca=TRUE, SD = 20,
+\S4method{limeRate}{SpatRaster}(x, method, unit = "meq/100g", check_Ca=TRUE, SD = 20,
+	         TAS = NULL, target_Ve = NULL, X = NULL, crop_type = NULL, 
+			 filename="", overwrite=FALSE, ...)
+
+\S4method{limeRate}{data.frame}(x, method, unit = "meq/100g", check_Ca=TRUE, SD = 20,
 	         TAS = NULL, target_Ve = NULL, X = NULL, crop_type = NULL)
+
 }
 
 
@@ -35,6 +40,11 @@ limeRate(x, method, unit = "meq/100g", check_Ca=TRUE, SD = 20,
   \item{X}{Crop nutrient requirement for Calcium and Magnesium. Optional for method \code{"gt"}}
     
   \item{crop_type}{One of \code{c("pasture", "cereal", "legume", "vegetable", "fruit")}. Optional to get default \code{target_Ve} values for method \code{"bv"} (when target_Ve is not provided).}
+  
+  \item{filename}{character. Output filename (optional)}
+  \item{overwrite}{logical. If \code{TRUE}, \code{filename} is overwritten}
+  \item{...}{additional arguments for writing files as in \code{\link[terra]{writeRaster}}}
+
 }
 
 \details{
