@@ -39,7 +39,7 @@ Aluminum toxicity is a function of the of the aluminum saturation (usually expre
 Importantly, despite most formulas use *exchangeable Aluminum*, we recommend calculating lime rates based on *exchangeable acidity*. See the Appendix at the end of the vignette for a discussion about this. 
 
 
-## `lr_ka()`: Kamprath (1970)
+## `method = "ka"`: Kamprath (1970)
 
 Kamprath performed a soil incubation study to test soil responses to increasing lime rates in four very acid soils (pH < 5, Al saturation > 50 %). The soils were incubated for 4 weeks at soil moisture capacity and 30°C. The response variables were effective cation exchange capacity (ECEC, sum of exchangeable Al^+3^, Ca^+2^, and Mg^+2^), exchangeable Al^+3^, and pH. Lime rates were a multiple of the exchangeable Al^+3^ (meq/100g) in each soil. Thus, lime rates are expressed in meq/100g of soil and not in t/ha or kg/ha.   
 
@@ -58,7 +58,7 @@ kamp$Al_sat <- kamp$Al/(kamp$Al + kamp$Ca_Mg) * 100
 soils <- unique(kamp$soil)
 col <- c('red', 'dark green', 'blue', 'gold')
 
-par(mar = c(4,4,2,2), cex = 0.8)
+par(mar = c(4,4,2,2), cex = 0.9)
 plot(Al_sat ~ LR, data = kamp, type = "n", 
      xlab = bquote(italic(LR)*"/"*exch.Al^{+3}), 
      ylab = "Al saturation (%)")
@@ -83,7 +83,7 @@ In function `lr_ka()`, the *lf* is controlled with the argument `lf`, whose defa
 
 
 
-## `lr_co()`: Cochrane et al., (1980)
+## `method = "co"`: Cochrane et al., (1980)
 
 Cochrane et al. basically takes Kamprath data and develops a formula that estimates the lime rate required to reduce the Al saturation level to the observed Al saturation level in the Kamprath’s trials. Then, the formula is tested in other independent data sets. All soils tested have pH < 5 and Al saturation ≥ 50%. 
 
@@ -134,27 +134,22 @@ As it is presented above, the rule seems quite complicated, but it could be simp
 
 Where *IAS* is the inital Aluminum saturation. In other words, if the target Aluminum saturation is more than a third of the initial saturation, the lime factor is 1.5. If the target is equal or less than a third, it is 2. Again, this change in the lime factor (*lf*) considers that, at small lime doses and high Al saturation, most of the lime reacts with the exch. Al^+3^, but more lime reacts with Al ions released by organic matter –Al complexes or aluminum hydroxides as the pH increases. Following this rule, the difference between Kamprath and Cochrane et al. formula should be small when the TAS is between 10 and 15%. 
 
-The data used by Cochrane et al. is available in `data(coch)`. Below I calculate recommended lime rates with `lr_co()` to compare them to the actual lime rates and the ones calculated by them, as reported in their study. 
+The data used by Cochrane et al. is available in `data(coch)`. Below I calculate recommended lime rates with `limeRate(method = "co")` to compare them to the actual lime rates and the ones calculated by them, as reported in their study. 
 
 
 ```{r, warning=FALSE, message=FALSE}
-library(data.table) # I prefer to use this package for data management
 data(coch)
-setDT(coch)
 
 # initial ECEC
-coch[is.na(exch_Ca_Mg), iECEC:= exch_Ca + exch_Mg + exch_Al]
-coch[!is.na(exch_Ca_Mg), iECEC:= exch_Ca_Mg + exch_Al]
-
-# inital aluminum saturation
-coch[, iAS:= 100 * exch_Al /iECEC]
+coch$ECEC <- rowSums(coch[, c("exch_Ca", "exch_Mg", "exch_Al", "exch_Ca_Mg")],
+                      na.rm = T)
 
 # predicted lime rate by Cochrane 1980 forumla
-coch[, pLR_meq:= lr(method = "co", check_Ca = FALSE,
-                    exch_ac = exch_Al, ECEC = iECEC, TAS = Al_sat)]
+coch$pLR_meq <- limeRate(coch[, c("exch_Al","ECEC")], method = "co", 
+                         check_Ca = FALSE, TAS = coch$Al_sat)
 
 # convert to kg.ha
-coch[!is.na(LR_kg.ha), pLR_kg.ha:= convert(pLR_meq, 1.2, 20) * 1000]
+coch$pLR_kg.ha <- convert(coch$pLR_meq, 1.2, 20) * 1000
 ```
 
 
@@ -166,55 +161,56 @@ par(pty = 's', mfrow = c(1,3), cex.axis = 0.9, tcl = -0.4, mar = c(4,4,2,2),
     mgp = c(2.5,.8,0))
 
 # kamprath 1970
-d <- coch[source == "Kamprath1970",]
+d <- coch[coch$source == "Kamprath1970",]
 plot(d$LR_meq, d$pLR_meq,
      xlab = "Actual LR (meq/100g)", 
      ylab = "Estimated LR (meq/100g)") 
-mtext("Kamprath (1970)", line = 0.1, cex = 0.8)     
+mtext("Kamprath (1970)", line = 0.1, cex = 0.9)     
 abline(a = 0, b = 1)
 
 # mark differences between results from formula and paper
-dd <- d[abs(LR_hat/1000 - pLR_meq) > 0.1]
+dd <- d[abs(d$LR_hat/1000 - d$pLR_meq) > 0.1,]
 points(dd$LR_meq, dd$pLR_meq, pch = 4, col = "red")
 points(dd$LR_meq, dd$LR_hat/1000, pch = 19, col = "red")
 
 # Leon (1978)
-d <- coch[source == "Leon1978",]
+d <- coch[coch$source == "Leon1978",]
 plot(d$LR_meq, d$pLR_meq,
      xlab = "Actual LR (meq/100g)", 
      ylab = "Estimated LR (meq/100g)") 
-mtext("Leon (1978)", line = 0.1, cex = 0.8)     
+mtext("Leon (1978)", line = 0.1, cex = 0.9)     
 abline(a = 0, b = 1)
 
 # mark differences between results from formula and paper
-dd <- d[abs(LR_hat/1000 - pLR_meq) > 0.1]
+dd <- d[abs(d$LR_hat/1000 - d$pLR_meq) > 0.1,]
 points(dd$LR_meq, dd$pLR_meq, pch = 4, col = "red")
 points(dd$LR_meq, dd$LR_hat/1000, pch = 19, col = "red")
 
 # Brazil field studies
-d <- coch[!is.na(LR_kg.ha)]
+d <- coch[!is.na(coch$LR_kg.ha),]
 
 plot(d$LR_kg.ha, d$pLR_kg.ha, xlim = c(0,8000), ylim = c(0,8000),
      xlab = "Actual LR (kg/ha)", 
      ylab = "Estimated LR (kg/ha)") 
-mtext("Brazilian field studies", line = 0.1, cex = 0.8)     
+mtext("Brazilian field studies", line = 0.1, cex = 0.9)     
 abline(a = 0, b = 1)
 
 # mark differences between results from formula and paper
-dd <- d[abs(LR_hat - pLR_kg.ha) > 100]
+dd <- d[abs(d$LR_hat - d$pLR_kg.ha) > 100,]
 points(dd$LR_kg.ha, dd$pLR_kg.ha, pch = 4, col = "red")
 points(dd$LR_kg.ha, dd$LR_hat, pch = 19, col = "red")
 
 # mark in blue points that where omitted in the paper 
-dd <- d[is.na(LR_hat)]
+dd <- d[is.na(d$LR_hat),]
 points(dd$LR_kg.ha, dd$pLR_kg.ha, pch = 19, col = "blue")
+
 ```
 
-Cochrane et al. formula works better in very acid soils and low to intermediate lime rates because, in these conditions, most of the lime reacts with the exch. Al+3 (and maybe because ECEC does not change much). It was not tested in moderate acid soils (pH between 5 and 5.5 and Al saturation between 25 and 50%). In addition, Cochrane et al. (discretionally) manipulated the rule to change the lime factor between 1.5 and 2 (always getting a better accuracy).
+Cochrane et al. formula works better in very acid soils and low to intermediate lime rates because, in these conditions, most of the lime reacts with the exch. Al+3 (and maybe because ECEC does not change much). It was not tested in moderate acid soils (pH between 5 and 5.5 and Al saturation between 25 and 50%) and for very high lime rates (> 2 times the initial exch. Al). In addition, Cochrane et al. (discretionally) manipulated the rule to change the lime factor between 1.5 and 2 (always getting a better accuracy).
 
-Nevertheless, testing the formula against field studies is tricky because not all the lime might react with the soil in the first year of the experiment, particularly at high lime doses (Figure 3, Brazilian studies). Moreover, it does not make sense to test the formula against very high lime rates because the formula will never predict a ridiculously high dose. Note that “target Al saturation” is the response variable and not the independent variable (or treatment).
+Nevertheless, testing the formula against field studies is tricky because not all the lime might react with the soil in the first year of the experiment, particularly at high lime doses (Figure 3, Brazilian studies). Moreover, it does not make sense to test the formula against very high lime rates because the formula will never predict a ridiculously high dose. Note that “target Al saturation” is the response variable of the experiments and not the independent variable (or treatment).
 
-Thus, despite the inconsistencies and the lack of agreement in field studies and very high lime doses, this widely used formula provides reasonable lime rate recommendations and is one of the best methods available so far.  
+Thus, despite the inconsistencies and the lack of agreement in field studies and very high lime doses, this widely used formula provides reasonable lime rate recommendations when the target aluminum saturation is not very low, and is one of the best methods available so far.  
 
 
 ### ACID4: a "modification" of Cochrane et al. formula
@@ -224,7 +220,7 @@ Yost et al. (1988) used a “modification” of the Cochrane formula in an exper
 Their formula adaptation is simply a modification of the lime factor (*lf*) plus a unit conversion. From some (unreachable) data, they calculated that, in their soils, 0.53 cmol of exchangeable acidity is neutralized per cmol of Ca equivalent. Thus, their $lf = 1/0.53 = 1.9$. They further modify the *lf* to convert the results from meq/100g to t/ha, assuming a soil bulk density of 1 and an incorporation depth of 15cm. For this reason, they ended with a *lf* of 1.4. This final formula with $lf = 1.4$ was used in all ACID4 applications (e.g. Yamoah et al., (1992) and Ngendo (2013, U Gent MS thesis)). Mind the difference between the *lf* with the unit conversion ($lf = 1.4$, results in t/ha) and the original *lf* (= 1.9), which represents the amount of lime needed (meq of Ca/100g soil) to neutralize 1 meq of soil acidity (or exch. Al^+3^) per 100g of soil. Their estimated *lf* (1.9) is very similar to the one used by Cochrane when the target Al saturation is less than a third of the original Al saturation, which is likely the case for most acid soils and relatively sensitive crops. Note that modifying the *lf* to account for differences in soil weight (incorporation depth and soil bulk density) is a common practice that adds confusion and results in endless *lf* values. Also, note that they did not incorporate Cochrane et al. rule to define different *lf* values depending on the relation between initial and target Al saturation.  
 
 
-## `lr_nu()`: NuMaSS (Osmond et al., 2002)
+## `method = "nu"`: NuMaSS (Osmond et al., 2002)
 
 The Integrated Soil Nutrient Management Decision Support System (NuMaSS) was another software developed to provide fertilizer (N and P) and lime recommendations for acid soils with nutrient problems, considering location-specific differences in resources, soil, climate, crop, and management. N, P, and acidity soil constraints were estimated individually, but the final management recommendation was integrated into an economic module that considered costs and benefits. 
 
@@ -251,27 +247,26 @@ where
 
 Where Al is soil extractable **acidity** with 1N KCl (exchangeable) and *clay* is clay fraction in the soil. 
 
-Note that when the paragraph quoted above says *“the lime factor differed between high and low Al saturation values within a soil,”* it is referring to the target Al saturation (TAS), as shown by the second term in the formula: $(7.5 \times [(19-TAS) \times ECEC⁄100]$. This is related to the fact that, for a given soil, more lime is required to decrease one unit of Al saturation as pH rises and Al saturation decreases (as shown in Figure 1). Furthermore, I guess that this second term is only applied when TAS is < 20 (or < 19) to make a two-segment linear response (piecewise) of lime rate to decreasing TAS. Otherwise, it would be a linear response that can take negative values for TAS > 19 (Figure 4).    
+Note that when the paragraph quoted above says *“the lime factor differed between high and low Al saturation values within a soil,”* it is referring to the target Al saturation (TAS), as shown by the second term in the formula: $(7.5 \times [(19-TAS) \times ECEC⁄100]$. This is related to the fact that, for a given soil, more lime is required to decrease one unit of Al saturation as pH rises and Al saturation decreases (as shown in Figure 1). Furthermore, this second term may be only applied when TAS is < 20 (or < 19) to make a two-segment linear response (piecewise) of lime rate to decreasing TAS. Otherwise, it would be a linear response that can take negative values for TAS > 19 (Figure 4).    
 
 ```{r}
 # different ways in which the formula could be interpreted
 # as is
 nu_lime1 <- function(tas, exch_al, ecec, clay){
-  lf <- ifelse(ecec/clay < 4.5, 2.5, 1.3) 
+  lf <- ifelse(ecec/clay <= 4.5, 2.5, 1.3) 
   lime <- lf * (exch_al - ecec * tas/100) + 7.5 * ((19 - tas)/100 * ecec)
   return(lime)
   
 }
 
-# forcing the second term to be positive or 0 (i.e., apply only when TAS < 19)
 nu_lime2 <- function(tas, exch_al, ecec, clay){
-  lf <- ifelse(ecec/clay < 4.5, 2.5, 1.3) 
+  lf <- ifelse(ecec/clay <= 4.5, 2.5, 1.3) 
   lime <- lf * (exch_al - ecec * tas/100) + pmax(7.5 * ((19 - tas)/100 * ecec), 0)
   return(lime)
   
 }
 
-# test functions in two soils with different ECEC/clay activity, for different TAS
+# test functions in two soils with different ECEC/clay activity, for different S
 tas <- 50:0
 
 # soil 1: high ECEC/clay, 75% Al saturation
@@ -291,29 +286,27 @@ s2.l1 <- nu_lime1(tas = tas, exch_al = exch_al, ecec = ecec, clay = clay)
 s2.l2 <- nu_lime2(tas = tas, exch_al = exch_al, ecec = ecec, clay = clay)
 ```
 
-```{r,fig.cap="Figure 3. Lime rate (LR, t/ha) as predicted by two interpretations of NuMaSS formula for two soils with different ECEC/clay.", fig.dim = c(4,2)}
+```{r,fig.cap="Figure 3. Lime rate (LR, t/ha) as predicted by two interpretations of NuMaSS formula for two soils with different ECEC/clay.", fig.dim = c(6,3)}
 # plot
-par(mfrow = c(1,2), mgp = c(2, .8, 0), mar = c(3,3,2,1))
+par(mfrow = c(1,2), mgp = c(2, .8, 0), mar = c(3,3,2,1), cex = 0.9)
 plot(tas, s1.l1, type = "l", col = "red", xlab = "TAS (%)", ylab = "LR (t/ha)", 
-     xlim = c(50,0), main = "Formula as is")
+    xlim = c(50,0), main = "Formula as is")
 lines(tas, s2.l1, col = "blue")
 abline(h = 0, lty = 3)
 legend(50, 10, legend = c("High ECEC", "Low ECEC"), lty = 1, 
-       cex = .8, col = c("red", "blue"), xjust = 0, yjust = 1, bty = "n")  
+      cex = .8, col = c("red", "blue"), xjust = 0, yjust = 1, bty = "n")  
 abline(h = 0, lty = 3)
 
 plot(tas, s1.l2, type = "l", col = "red", xlab = "TAS(%)", ylab = "",
-     xlim = c(50,0), main = ("Piecewise"))
+    xlim = c(50,0), main = ("Piecewise"))
 lines(tas, s2.l2, col = "blue")
 legend(50, 10, legend = c("High ECEC", "Low ECEC"), lty = 1, 
-       cex = .8, col = c("red", "blue"), xjust = 0, yjust = 1, bty = "n")  
+      cex = .8, col = c("red", "blue"), xjust = 0, yjust = 1, bty = "n")  
 abline(h = 0, lty = 3)
-
-
 
 ```
 
-The formula predicts lime rates in t/ha by assuming an incorporation depth of 15 cm and a soil bulk density of 1 g/cm^3^. Incorporation depth is stated clearly. The formula description says that exch. acidity and ECEC can be expressed in cmol/l or kg, and that the program converts exchangeable acidity and ECEC values from weight-by-weight lab units to weight-by-volume at the field level. Thus, if soil bulk density is different from 1g/cm3, the ECEC, and exch. Acidity values are transformed from cmol/kg to cmol/l by multiplying those values with the soil bulk density (kg/l). Converting exchangeable acidity and ECEC values is the same as converting the lime factor (as done by Yost et al. (1988) and others) and also equivalent to calculating the lime rate in meq/100g and then transforming the result.  Thus, for compatibility with other formulas, I’ve rewritten the formula converting the lime factors so that the result is in meq/100g soil. Taking this into account and the fact that the second term cannot result in negative values, the formula implemented in `lr_nu()` is:
+The formula predicts lime rates in t/ha by assuming an incorporation depth of 15 cm and a soil bulk density of 1 g/cm^3^. Incorporation depth is stated clearly. The formula description says that exch. acidity and ECEC can be expressed in cmol/l or kg, and that the program converts exchangeable acidity and ECEC values from weight-by-weight lab units to weight-by-volume at the field level. Thus, if soil bulk density is different from 1g/cm3, the ECEC, and exch. acidity values are transformed from cmol/kg to cmol/l by multiplying those values with the soil bulk density (kg/l). Converting exchangeable acidity and ECEC values is the same as converting the lime factor (as done by Yost et al. (1988) and others) and also equivalent to calculating the lime rate in meq/100g and then transforming the result.  Thus, for compatibility with other formulas, the formula was rewritten converting the lime factors so that the result is in meq/100g soil. Taking this into account and the fact that the second term cannot result in negative values, the formula implemented in `lr_nu()` is:
 
 \begin{equation}
   LR (meq⁄100g) = 
@@ -332,93 +325,95 @@ The NuMaSS formula seems to offer a good theoretical improvement against the Coc
 However, Figure 5 shows that NuMaSS does a worse job predicting incubation studies results, particularly when TAS is low (< 10). The rule for TAS < 19 can severely over-predict lime rates and should be revised.  
 
 
-```{r}
+```{r,fig.cap="Figure 4. Estimated vs. actual lime rates for Cochrane and NuMaSS formulas. The colors of the point indicate the target Al saturation (high TAS = yellow, low TAS = blue). Circles are observations obatined in incubation studies and squares in field studies.", fig.dim = c(6,3)}
 # Formulas evaluation ######################
-# merge cochrane estimations in a single column
-coch[!is.na(pLR_meq), co_LR:= pLR_meq]
-coch[!is.na(pLR_kg.ha), co_LR:= pLR_kg.ha / 1000]
-coch[, c("pLR_meq", "pLR_kg.ha"):= NULL]
+coch$co_LR <- ifelse(is.na(coch$LR_meq), coch$pLR_kg.ha/1000, coch$pLR_meq)
+coch$pLR_meq <- NULL
+coch$pLR_kg.ha <- NULL
 
-# calculate LR with NuMaSS formulas
-coch[, nu_LR:= lr(method = "nu", check_Ca = FALSE,
-                  exch_ac = exch_Al, ECEC = iECEC, TAS = Al_sat, clay = clay)]
+coch$nu_LR <- limeRate(coch[, c("exch_Al","ECEC", "clay")], method = "nu", TAS = coch$Al_sat, check_Ca = FALSE)
 
-coch[!is.na(LR_kg.ha), nu_LR:= convert(nu_LR, 1.2, 15)]
+coch$nu_LR <- ifelse(is.na(coch$LR_kg.ha), 
+                     coch$nu_LR, 
+                     convert(coch$nu_LR, 1.2, 15))
 
-coch[!is.na(LR_meq), LR:= LR_meq]
-coch[is.na(LR_meq), LR:= LR_kg.ha/1000]
+coch$LR <- ifelse(is.na(coch$LR_meq), coch$LR_kg.ha/1000, coch$LR_meq)
 
 nams <- unique(coch$source)
 n <- length(nams)
 cols <- viridis::viridis(41)
 
-par(mfrow = c(1,2), mar = c(4,4,2,2), mgp = c(2, .8, 0))
+par(mfrow = c(1,2), mar = c(4,4,2,2), mgp = c(2, .8, 0), cex = 0.9)
 plot(coch$LR, coch$co_LR, type = "n",
      xlab = "Actual lime rate", 
      ylab = "Estimated lime rate")
 mtext("Cochrane formula")
 
 for(i in 1:n){
-  d <- coch[source == nams[i],]
+  d <- coch[coch$source == nams[i],]
   points(d$LR, d$co_LR, bg = cols[pmin(d$Al_sat, 40)+1], 
          pch = ifelse(is.na(d$LR_kg.ha), 21, 22))
 }
 
 abline(a = 0, b = 1)
 
-plot(coch$LR, coch$nu_LR, type = "n",
+plot(coch$LR, coch$nu_LR, type = "n", ylim = c(0,20), xlim = c(0,20),
      xlab = "Actual lime rate", 
      ylab = "Estimated lime rate")
 mtext('NuMaSS formula')
 for(i in 1:n){
-  d <- coch[source == nams[i],]
+  d <- coch[coch$source == nams[i],]
   points(d$LR, d$nu_LR, bg = cols[pmin(d$Al_sat, 40)+1], 
          pch = ifelse(is.na(d$LR_kg.ha), 21, 22))
 }
 abline(a = 0, b = 1)
 
-
-
 ```
 
 
+It should be noted that this way of testing the formulas is far from ideal. The target Al saturation is an independent variable in the formulas, but the response variables of the experiment. On the contrary, lime rate is the independent variable in experiments but a dependent variable in formulas. Thus, there might be very high experimental lime rates that a formula cannot predict. 
+
+
+## `method = "my"` My lime recommendation formula
+
+TBD. 
+.
+.
+.
+.
+
+
+# Base Saturation formula
+
+## `method = "bv` Brazil V mehtod
+
+This method has been used in the state of Sao Paulo, Brazil, at least for the last thirty years. It is based on the *"base saturation"*, which is the sum of all exchangeable bases divided the Cation Exchange Capacity at pH 7 (`CEC_7`). The sum of all exchangeable cations (bases plus acidity (Al and H)) is the Effective Cation Exchange Capacity (ECEC), which is always lower than the `CEC_7` in acid soils, simply because at higher pH, there are more pH dependent negative charges available. The difference between ECEC and CEC 7 is related to the buffer capacity of the soil. Thus, the Brazil V method somehow takes this buffer capacity into account. 
+
+On the other hand, the method considers that all the applied lime increases the base saturation of the soil, thus, liming has a 100% efficiency in increasing base content. The formula estimates how much lime is required to increase the base saturation of the soil to the required level for the crop. It is considered that most crops required base saturation levels between 40 adn 70%. The `limeRate` function provides some default values for different crop types. 
+
+The Brazil V formula is
+
+$$
+LR = CEC_{pH 7} \times (V_f - V_i)
+$$
+where $V_f$ is the final base saturation and $V_i$ is the initial base saturation. And base saturation equals: $V = (Exch.Ca + Exch. Mg + Exch. K + Exch. Na)/CEC_{pH7}$   
+For convenience, in `limeRate` the formula is implemented as:
+
+$$
+LR = CEC_7 \times V_f - (ECEC - exch. acidity)
+$$
+
+Note that $CEC_7 \times V_f$ equals the final sum of exchangeable bases, while $ECEC - exch. acidity$ equals the initial sum of exhangeable bases. 
 
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+.    
+.    
+.    
+.    
+.   
 
 
 
@@ -431,7 +426,7 @@ Moreover, distinguishing between acidity components (H^+^, Al^+3^, Fe^+2^) is no
 
 Therefore, most likely all exch. Al^+3^ reported in the old literature (without mentioning H^+^) are measures of exchangeable acidity (but primarily caused by Al) as it is very difficult to discern between acidity components (Bohn et al., 2002). In his PhD thesis, Jose Salinas states this clearly:
 
-> *"Exhcangeable acidity was determined by titration of the filtrate with 0.01N NaOH using bromthymol blue as an indicator. Exchangeable acidity was considered to be due to exchangeable Al (Lin and Coleman, 1960)"* (pp 79)
+> *"Exchangeable acidity was determined by titration of the filtrate with 0.01N NaOH using bromthymol blue as an indicator. Exchangeable acidity was considered to be due to exchangeable Al (Lin and Coleman, 1960)"* (pp 79)
 
-For this reason, in the `limer` pakcage, all lime recommendation formulas based on Aluminum saturation require exchangeable acidity instead of exchangeable aluminum. 
+For this reason, in the `limer` package, all lime recommendation formulas based on Aluminum saturation require exchangeable acidity instead of exchangeable aluminum. 
 
