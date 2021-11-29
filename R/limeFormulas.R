@@ -1,5 +1,5 @@
 .lr <- function(method, unit = "meq/100g", check_Ca = TRUE, SD = 20,
-                exch_ac = NULL, ECEC = NULL, SBD = NULL, 
+                exch_ac = NULL, exch_bases = NULL, ECEC = NULL, SBD = NULL, 
                 exch_Al = NULL, exch_H = NULL, 
                 exch_Ca = NULL, exch_Mg = NULL, exch_K = NULL, exch_Na = NULL,
                 CEC_7 = NULL, pot_ac = NULL, pH = NULL, OM = NULL, clay = NULL,
@@ -44,15 +44,21 @@
   }  
   
   if(is.null(ECEC) & meth != "ka"){
-    if(is.null(exch_Ca) & is.null(exch_Mg) & is.null(exch_K) & is.null(exch_Na)){
+    if(is.null(exch_bases) | (is.null(exch_Ca) & is.null(exch_Mg) & is.null(exch_K) & is.null(exch_Na))){
       stop("exchangeable bases values should be provided when ECEC is missing")
     }
-    m <- cbind(exch_Ca, exch_Mg, exch_K, exch_Na)
-    ECEC <- rowSums(m) + exch_ac
+    if(!is.null(exch_bases)){
+      ECEC <- exch_ac + exch_bases
+    } else {
+      m <- cbind(exch_Ca, exch_Mg, exch_K, exch_Na)
+      ECEC <- rowSums(m) + exch_ac  
+    }
   }
   
   if(meth %in% c("bv", "br", "gt", "te")){
-    exch_bases <- ECEC - exch_ac
+    if(is.null(exch_bases)){
+      exch_bases <- ECEC - exch_ac  
+    }
     if(is.null(CEC_7) & is.null(pot_ac)){
       stop("CEC_7 or pot_ac is needed for this method")
     }
@@ -63,7 +69,7 @@
       pot_ac <- CEC_7 - exch_bases
     }
   }
-
+  
   ## Specific ----
   if(meth %in% c("my", "co", "nu")){
     if(is.null(TAS)) stop("TAS is needed for this method")

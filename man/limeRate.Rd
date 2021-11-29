@@ -76,13 +76,15 @@ Compute lime rate recommendations using one of several methods.
   
     \item{\code{exch_ac}}{Exchangeable acidity (meq/100g of soil) as extracted with a neutral unbuffered salt (e.g. 1N KCl). If not provided, it can be estimated as \code{exch_Al + exch_H} (or equal to \code{exch_Al} if \code{exch_H} is missing).}
     
-    \item{\code{ECEC}}{Effective cation exchange capacity (meq/100g of soil) as extracted with a neutral unbuffered salt. If not provided, it is estimated as the sum of all available exchangeable bases (e.g. \code{exch_Ca, exch_Mg, exch_K, exch_Na}) plus the exchangeable acidity (either \code{exch_ac} or \code{exch_Al + exch_H})} 
+    \item{\code{exch_bases}}{Exchangeable bases, sum of exchangeable Ca, Mg, K, and Na (meq/100g of soil).}
+    
+    \item{\code{ECEC}}{Effective cation exchange capacity (meq/100g of soil). If not provided, it is estimated as the sum of exchangeable bases plus the exchangeable acidity.} 
     
     \item{\code{SBD}}{Soil bulk density (g/cm3, kg/dm3, or kg/l). Required if \code{unit = "kg/ha"} or \code{unit = "t/ha"}, or if \code{check_Ca = TRUE}}
   
     \item{\code{exch_Al, exch_H}}{Exchangeable Al and exchangeable H (meq/100g of soil) as extracted with a neutral unbuffered salt (e.g. 1N KCl)}
     
-    \item{\code{exch_Ca, exch_Mg, exch_K, exch_Na}}{Exchangeable bases as extracted with a neutral unbuffered salt (e.g. 1N KCl).}
+    \item{\code{exch_Ca, exch_Mg, exch_K, exch_Na}}{Exchangeable Ca, Mg, K, and Na (meq/100g of soil).}
     
     \item{\code{CEC_7}}{Cation exchange capacity buffered at pH 7 (meq/100g of soil). If not provided, it can be estimated from \code{exch_ac}, \code{ECEC}, \code{pot_ac}. Needed for methods \code{"bv"} and \code{"gt"}}
     
