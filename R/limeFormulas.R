@@ -44,7 +44,7 @@
   }  
   
   if(is.null(ECEC) & meth != "ka"){
-    if(is.null(exch_bases) | (is.null(exch_Ca) & is.null(exch_Mg) & is.null(exch_K) & is.null(exch_Na))){
+    if(is.null(exch_bases) & (is.null(exch_Ca) & is.null(exch_Mg) & is.null(exch_K) & is.null(exch_Na))){
       stop("exchangeable bases values should be provided when ECEC is missing")
     }
     if(!is.null(exch_bases)){
