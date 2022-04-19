@@ -107,7 +107,7 @@
   
   if(meth == "my"){
     # message("using my method")
-    lime <- .lr_my(exch_ac = exch_ac, ECEC = ECEC, TAS = TAS, clay = clay)
+    lime <- .lr_my(exch_ac = exch_ac, ECEC = ECEC, TAS = TAS)
   }
   
     
@@ -188,20 +188,10 @@
 
 
 # Aramburu Merlos et al. xxx
-.lr_my <- function(exch_ac, ECEC, TAS, clay = NULL){
-  b <- 0.2
-  if(is.null(clay)){
-  a <- 0.8  
-  } else {
-    a <- 0.5 + (ECEC/clay)/40
-    a[a > 0.8] <- 0.8
-  }
-  a.ac <- a * exch_ac
+.lr_my <- function(exch_ac, ECEC, TAS, a = 0.5816, b = 0.9072){
   tas <- TAS/100
-  in.sqrt <- a.ac^2 - 4*b*a.ac * (tas - 1) * (tas*ECEC - exch_ac)
-  # to do: find a solution by optimization when in.sqrt is negative (?)
-  # in.sqrt[in.sqrt < 0] <- 0
-  lime <- exch_ac * ((a.ac - sqrt(in.sqrt)) / (2*b*a.ac * (1 - tas)))
+  lf <- 1/(a + tas * (b-a))
+  lime <- lf(exch_ac - tas * ECEC) 
   return(lime)
 }
 
