@@ -191,7 +191,7 @@
 .lr_my <- function(exch_ac, ECEC, TAS, a = 0.5816, b = 0.9072){
   tas <- TAS/100
   lf <- 1/(a + tas * (b-a))
-  lime <- lf(exch_ac - tas * ECEC) 
+  lime <- lf * (exch_ac - tas * ECEC) 
   return(lime)
 }
 
