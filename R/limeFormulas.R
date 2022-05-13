@@ -188,7 +188,7 @@
 
 
 # Aramburu Merlos et al. xxx
-.lr_my <- function(exch_ac, ECEC, TAS, a = 0.5816, b = 0.9072){
+.lr_my <- function(exch_ac, ECEC, TAS, a = 0.6, b = 0.2){
   tas <- TAS/100
   lf <- 1/(a + tas * (b-a))
   lime <- lf * (exch_ac - tas * ECEC) 
