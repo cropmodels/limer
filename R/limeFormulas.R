@@ -5,22 +5,25 @@
                 CEC_7 = NULL, pot_ac = NULL, pH = NULL, OM = NULL, clay = NULL,
                 TAS = NULL, target_Ve = NULL, X = NULL, crop_type = NULL) {
   
-  meth <- substr(tolower(method), 1, 2)
   
   # check inputs.  ########
   
   ## General -----
-  av.meth <- c("my", "ka", "co", "nu", "bv", "br", "gt", "te")
+  av.meth <- c("my", "aramburu-merlos", "kamprath", "cochrane", "numass", "teixera", "bv", "br", "gt" )
+  ## note that this uses partial matching such that "ka" is valid for "kamprath"
+  ## it gives an error if (length(av.meth) > 1) | (!meth %in% av.meth)
+  meth <- match.arg(tolower(method), av.meth) 
+  meth <- substr(meth, 1, 2)
+  if (meth == "ar") meth <- "my"  
+	
+#  if(length(meth) > 1){
+#    stop("lime requirement can be calculated with only one method at a time")
+#  }
+#  if(!meth %in% av.meth){
+#    stop("unrecognized method")
+#  }
   
-  if(length(meth) > 1){
-    stop("lime requirement can be calculated with only one method at a time")
-  }
-  
-  if(!meth %in% av.meth){
-    stop("unrecognized method")
-  }
-  
-  if(unit %in% c("kg/ha", "t/ha") | check_Ca){
+  if((unit %in% c("kg/ha", "t/ha")) | check_Ca){
     if(is.null(SBD)){
       stop("Soil bulk density (SBD) is needed to estimate lime requirement in kg or t per ha and for Ca deficiencies check")
     }
