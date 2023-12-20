@@ -1,15 +1,15 @@
 Package: limer
 Type: Package
 Title: Acidic soil management for agriculture
-Version: 0.1-3
+Version: 0.1-4
 Depends: R (>= 3.5.0)
-Date: 2021-11-15
-Imports: methods, terra
+Date: 2023-12-20
+Imports: methods
 Author: Fernando Aramburu Merlos
 Maintainer: <faramburumerlos@gmail.com>
 Description: Functions to compute liming recommendations and predict soil and yield responses in acid soils. Package developed for the GAIA project. 
 License: GPL (>=3)
 Suggests: 
-    knitr, viridis, 
+    knitr, viridis, terra,
     rmarkdown, tinytest
 VignetteBuilder: knitr
