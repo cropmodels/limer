@@ -9,12 +9,12 @@
   # check inputs.  ########
   
   ## General -----
-  av.meth <- c("my", "aramburu-merlos", "kamprath", "cochrane", "numass", "teixera", "bv", "br", "gt" )
+  av.meth <- c("limer", "my", "aramburu-merlos", "kamprath", "cochrane", "numass", "bv", "br", "gt", "te" )
   ## note that this uses partial matching such that "ka" is valid for "kamprath"
   ## it gives an error if (length(av.meth) > 1) | (!meth %in% av.meth)
   meth <- match.arg(tolower(method), av.meth) 
   meth <- substr(meth, 1, 2)
-  if (meth == "ar") meth <- "my"  
+  if (meth %in% c("li", "ar")) meth <- "my"  
 	
 #  if(length(meth) > 1){
 #    stop("lime requirement can be calculated with only one method at a time")

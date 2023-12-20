@@ -25,7 +25,7 @@ Compute lime rate recommendations using one of several methods.
 \arguments{
   \item{x}{SpatRaster, data.frame or matrix (with column names) with soil data. SpatRaster layer names or data.frame/matrix column names must match the names of the variables used by each specific method. See details.}
   
-   \item{method}{Method (formula) used to compute lime recommendation. One of \code{c("ar", "ka", "co", "nu", "bv", "gt")}.}
+   \item{method}{Method (formula) used to compute lime recommendation. One of \code{c("li", "ka", "co", "nu", "bv", "gt")}.}
   
   \item{unit}{Lime rate unit of the output. If \code{unit = "t/ha"} or \code{unit = "kg/ha"} lime rate is transformed with function \code{\link{convert}} and soil bulk density (\code{SBD}) must be specified.} 
   
@@ -33,7 +33,7 @@ Compute lime rate recommendations using one of several methods.
   
   \item{SD}{Soil depth (cm) of lime incorporation. Default value is 20cm. It does not affect the result if \code{unit = "meq/100g"} (default value) and \code{check_Ca = FALSE}.}
   
-  \item{TAS}{Target aluminum saturation after liming (\%). Required for methods \code{"ar"}, \code{"co"}, \code{"nu"}}
+  \item{TAS}{Target aluminum saturation after liming (\%). Required for methods \code{"li"}, \code{"co"}, \code{"nu"}}
   
   \item{target_Ve}{Target base saturation after liming (\%). Needed for method \code{"bv"}. If not provided, default values can be retrieved by \code{crop_type}}
      
@@ -50,7 +50,7 @@ Compute lime rate recommendations using one of several methods.
 \details{
   The available methods are:
   \itemize{
-    \item{\code{"ar"}: Aramburu-Merlos et al. (2023)}
+    \item{\code{"li"}: Aramburu-Merlos et al. (2023)}
     \item{\code{"ka"}: Kamprath (1970).}
     \item{\code{"co"}: Cochrane et al. (1980).}
     \item{\code{"nu"}: NuMaSS.}
@@ -65,7 +65,7 @@ Compute lime rate recommendations using one of several methods.
   \code{"ka"} \tab X   \cr
   \code{"co"} \tab X \tab X \cr
   \code{"nu"} \tab X \tab X \cr
-  \code{"ar"} \tab X \tab X \cr
+  \code{"li"} \tab X \tab X \cr
   \code{"bv"} \tab X \tab X \tab X  \cr
   \code{"gt"} \tab X \tab X \tab X \tab X \tab X \cr
   
@@ -90,7 +90,7 @@ Compute lime rate recommendations using one of several methods.
     
     \item{\code{pot_ac}}{Potencial acidity. If not provided, it can be estimated from \code{exch_ac}, \code{ECEC}, \code{CEC_7}. Needed for methods \code{"bv"} and \code{"gt"}}
 
-    \item{\code{clay}}{Clay fraction of the soil {0,1}. Optional for methods \code{"ar"} and \code{"nu"}} 
+    \item{\code{clay}}{Clay fraction of the soil {0,1}. Optional for methods \code{"li"} and \code{"nu"}} 
 
     \item{\code{pH}}{Soil pH(H2O), determined in a 1:2.5 (v:v) ratio. Required for method \code{"gt"}}
     
@@ -138,7 +138,7 @@ x <- data.frame(exch_ac = c(2:4,NA), ECEC = 5)
 
 limeRate(x, method = "ka", check_Ca = FALSE)
 limeRate(x, method = "co", check_Ca = FALSE, TAS = 15)
-limeRate(x, method = "ar", check_Ca = FALSE, TAS = 15)
+limeRate(x, method = "li", check_Ca = FALSE, TAS = 15)
 
 x$CEC_7 <- 10
 limeRate(x, method = "bv", check_Ca = FALSE, target_Ve = 50)
@@ -151,7 +151,7 @@ rr <- limeRate(r, method = "ka", check_Ca = FALSE)
 values(rr)
 rr <- limeRate(r, method = "co", check_Ca = FALSE, TAS = 15)
 values(rr)
-rr <- limeRate(r, method = "ar", check_Ca = FALSE, TAS = 15)
+rr <- limeRate(r, method = "li", check_Ca = FALSE, TAS = 15)
 values(rr)
 }
 
