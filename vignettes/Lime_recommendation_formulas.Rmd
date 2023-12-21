@@ -134,7 +134,7 @@ As it is presented above, the rule seems quite complicated, but it could be simp
 
 Where *IAS* is the inital Aluminum saturation. In other words, if the target Aluminum saturation is more than a third of the initial saturation, the lime factor is 1.5. If the target is equal or less than a third, it is 2. Again, this change in the lime factor (*lf*) considers that, at small lime doses and high Al saturation, most of the lime reacts with the exch. Al^+3^, but more lime reacts with Al ions released by organic matter –Al complexes or aluminum hydroxides as the pH increases. Following this rule, the difference between Kamprath and Cochrane et al. formula should be small when the TAS is between 10 and 15%. 
 
-The data used by Cochrane et al. is available in `data(coch)`. Below I calculate recommended lime rates with `limeRate(method = "co")` to compare them to the actual lime rates and the ones calculated by them, as reported in their study. 
+The data used by Cochrane et al. is available in `data(coch)`. Below I calculate recommended lime rates with `limeRate(method = "Cochrane")` to compare them to the actual lime rates and the ones calculated by them, as reported in their study. 
 
 
 ```{r, warning=FALSE, message=FALSE}
@@ -145,7 +145,7 @@ coch$ECEC <- rowSums(coch[, c("exch_Ca", "exch_Mg", "exch_Al", "exch_Ca_Mg")],
                       na.rm = T)
 
 # predicted lime rate by Cochrane 1980 forumla
-coch$pLR_meq <- limeRate(coch[, c("exch_Al","ECEC")], method = "co", 
+coch$pLR_meq <- limeRate(coch[, c("exch_Al","ECEC")], method = "Cochrane", 
                          check_Ca = FALSE, TAS = coch$Al_sat)
 
 # convert to kg.ha
@@ -331,7 +331,7 @@ coch$co_LR <- ifelse(is.na(coch$LR_meq), coch$pLR_kg.ha/1000, coch$pLR_meq)
 coch$pLR_meq <- NULL
 coch$pLR_kg.ha <- NULL
 
-coch$nu_LR <- limeRate(coch[, c("exch_Al","ECEC", "clay")], method = "nu", TAS = coch$Al_sat, check_Ca = FALSE)
+coch$nu_LR <- limeRate(coch[, c("exch_Al","ECEC", "clay")], method = "numass", TAS = coch$Al_sat, check_Ca = FALSE)
 
 coch$nu_LR <- ifelse(is.na(coch$LR_kg.ha), 
                      coch$nu_LR, 
@@ -389,7 +389,7 @@ TBD.
 
 This method has been used in the state of Sao Paulo, Brazil, at least for the last thirty years. It is based on the *"base saturation"*, which is the sum of all exchangeable bases divided the Cation Exchange Capacity at pH 7 (`CEC_7`). The sum of all exchangeable cations (bases plus acidity (Al and H)) is the Effective Cation Exchange Capacity (ECEC), which is always lower than the `CEC_7` in acid soils, simply because at higher pH, there are more pH dependent negative charges available. The difference between ECEC and CEC 7 is related to the buffer capacity of the soil. Thus, the Brazil V method somehow takes this buffer capacity into account. 
 
-On the other hand, the method considers that all the applied lime increases the base saturation of the soil, thus, liming has a 100% efficiency in increasing base content. The formula estimates how much lime is required to increase the base saturation of the soil to the required level for the crop. It is considered that most crops required base saturation levels between 40 adn 70%. The `limeRate` function provides some default values for different crop types. 
+On the other hand, the method considers that all the applied lime increases the base saturation of the soil, thus, liming has a 100% efficiency in increasing base content. The formula estimates how much lime is required to increase the base saturation of the soil to the required level for the crop. It is considered that most crops required base saturation levels between 40 and 70%. The `limeRate` function provides some default values for different crop types. 
 
 The Brazil V formula is
 

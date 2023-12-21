@@ -25,21 +25,21 @@ Compute lime rate recommendations using one of several methods.
 \arguments{
   \item{x}{SpatRaster, data.frame or matrix (with column names) with soil data. SpatRaster layer names or data.frame/matrix column names must match the names of the variables used by each specific method. See details.}
   
-   \item{method}{Method (formula) used to compute lime recommendation. One of \code{c("li", "ka", "co", "nu", "bv", "gt")}.}
+   \item{method}{character. The method (formula) used to compute lime recommendation. Should partially match one of \code{c("LiTAS", "Kamprath", "Cochrane", "NuMASS", "BrazilV", "Teixeira")}. The matching is case-insensitive.}
   
-  \item{unit}{Lime rate unit of the output. If \code{unit = "t/ha"} or \code{unit = "kg/ha"} lime rate is transformed with function \code{\link{convert}} and soil bulk density (\code{SBD}) must be specified.} 
+  \item{unit}{character. Lime rate unit of the output. If \code{unit = "t/ha"} or \code{unit = "kg/ha"} lime rate is transformed with function \code{\link{convert}} and soil bulk density (\code{SBD}) must be specified.} 
   
   \item{check_Ca}{logical. If \code{TRUE}, lime rate is adjusted to fix Calcium deficiencies and \code{exch_Ca} and \code{SBD} are required. Lime rate is set to a minimum of 150 kg/ha when Ca saturation is lower than 25\% (Sanchez, 2019)}
   
   \item{SD}{Soil depth (cm) of lime incorporation. Default value is 20cm. It does not affect the result if \code{unit = "meq/100g"} (default value) and \code{check_Ca = FALSE}.}
   
-  \item{TAS}{Target aluminum saturation after liming (\%). Required for methods \code{"li"}, \code{"co"}, \code{"nu"}}
+  \item{TAS}{numeric. Target aluminum saturation after liming (\%). Required for methods \code{"LiTAS"}, \code{"Cochrane"}, \code{"NuMaSS"}}
   
-  \item{target_Ve}{Target base saturation after liming (\%). Needed for method \code{"bv"}. If not provided, default values can be retrieved by \code{crop_type}}
+  \item{target_Ve}{numeric. Target base saturation after liming (\%). Needed for method \code{"BrazilV"}. If not provided, default values can be retrieved by \code{crop_type}}
      
-  \item{X}{Crop nutrient requirement for Calcium and Magnesium. Optional for method \code{"gt"}}
+  \item{X}{Crop nutrient requirement for Calcium and Magnesium. Optional for method \code{"Teixeira"}}
     
-  \item{crop_type}{One of \code{c("pasture", "cereal", "legume", "vegetable", "fruit")}. Optional to get default \code{target_Ve} values for method \code{"bv"} (when target_Ve is not provided).}
+  \item{crop_type}{One of \code{c("pasture", "cereal", "legume", "vegetable", "fruit")}. Optional to get default \code{target_Ve} values for method \code{"BrazilV"} (when target_Ve is not provided).}
   
   \item{filename}{character. Output filename (optional)}
   \item{overwrite}{logical. If \code{TRUE}, \code{filename} is overwritten}
@@ -50,24 +50,24 @@ Compute lime rate recommendations using one of several methods.
 \details{
   The available methods are:
   \itemize{
-    \item{\code{"li"}: Aramburu-Merlos et al. (2023)}
-    \item{\code{"ka"}: Kamprath (1970).}
-    \item{\code{"co"}: Cochrane et al. (1980).}
-    \item{\code{"nu"}: NuMaSS.}
-    \item{\code{"bv"}: Brazil V.}
-    \item{\code{"gt"}: Teixeira et al. (2020).}
+    \item{\code{"LiTAS"}: Aramburu-Merlos et al. (2023)}
+    \item{\code{"Kamprath"}: Kamprath (1970)}
+    \item{\code{"Cochrane"}: Cochrane et al. (1980)}
+    \item{\code{"NuMaSS"}: NuMaSS.}
+    \item{\code{"BrazilV"}: Brazil V (van Raij 1996)}
+    \item{\code{"Teixeira"}: Teixeira et al. (2020).}
   }
   
   The minimum set of variables in \code{x} (SpatRaster layers or matrix/data.frame columns) needed for each method are shown in the following table. (Variable description and alternatives are listed below) 
   
   \tabular{cccccc}{ 
   method    \tab    \code{exch_ac}   \tab   \code{ECEC} \tab \code{CEC_7} \tab \code{pH} \tab   \code{OM}    \cr
-  \code{"ka"} \tab X   \cr
-  \code{"co"} \tab X \tab X \cr
-  \code{"nu"} \tab X \tab X \cr
-  \code{"li"} \tab X \tab X \cr
-  \code{"bv"} \tab X \tab X \tab X  \cr
-  \code{"gt"} \tab X \tab X \tab X \tab X \tab X \cr
+  \code{"Kamprath"} \tab X   \cr
+  \code{"Cochrane"} \tab X \tab X \cr
+  \code{"NuMaSS"} \tab X \tab X \cr
+  \code{"LiTAS"} \tab X \tab X \cr
+  \code{"BrazilV"} \tab X \tab X \tab X  \cr
+  \code{"Teixeira"} \tab X \tab X \tab X \tab X \tab X \cr
   
   }  
   
@@ -86,17 +86,17 @@ Compute lime rate recommendations using one of several methods.
     
     \item{\code{exch_Ca, exch_Mg, exch_K, exch_Na}}{Exchangeable Ca, Mg, K, and Na (meq/100g of soil).}
     
-    \item{\code{CEC_7}}{Cation exchange capacity buffered at pH 7 (meq/100g of soil). If not provided, it can be estimated from \code{exch_ac}, \code{ECEC}, \code{pot_ac}. Needed for methods \code{"bv"} and \code{"gt"}}
+    \item{\code{CEC_7}}{Cation exchange capacity buffered at pH 7 (meq/100g of soil). If not provided, it can be estimated from \code{exch_ac}, \code{ECEC}, \code{pot_ac}. Needed for methods \code{"BrazilV"} and \code{"Teixeira"}}
     
-    \item{\code{pot_ac}}{Potencial acidity. If not provided, it can be estimated from \code{exch_ac}, \code{ECEC}, \code{CEC_7}. Needed for methods \code{"bv"} and \code{"gt"}}
+    \item{\code{pot_ac}}{Potential acidity. If not provided, it can be estimated from \code{exch_ac}, \code{ECEC}, \code{CEC_7}. Needed for methods \code{"BrazilV"} and \code{"Teixeira"}}
 
-    \item{\code{clay}}{Clay fraction of the soil {0,1}. Optional for methods \code{"li"} and \code{"nu"}} 
+    \item{\code{clay}}{Clay fraction of the soil {0,1}. Optional for methods \code{"LiTAS"} and \code{"NuMaSS"}} 
 
-    \item{\code{pH}}{Soil pH(H2O), determined in a 1:2.5 (v:v) ratio. Required for method \code{"gt"}}
+    \item{\code{pH}}{Soil pH(H2O), determined in a 1:2.5 (v:v) ratio. Required for method \code{"Teixeira"}}
     
-    \item{\code{OM}}{Soil organic matter content (g/kg). Required for method \code{"gt"}}    
+    \item{\code{OM}}{Soil organic matter content (g/kg). Required for method \code{"Teixeira"}}    
     
-    \item{\code{X}}{Crop nutrient requirement for Calcium and Magnesium, optional for method \code{"gt"}}
+    \item{\code{X}}{Crop nutrient requirement for Calcium and Magnesium, optional for method \code{"Teixeira"}}
     
   }
 }
@@ -120,8 +120,10 @@ Kamprath, E. J. (1970). Exchangeable aluminum as a criterion for liming leached 
 
 Osmond, D. L., Smyth, T. J., Yost, R. S., Reid, W. S., Hoag, D. L., Branch, W., & Li, H. (2002). Nutrient Management Support System (NuMaSS) v. 2. Soil Management Collaborative Research Support Program. USA: United States Agency for International Development, Soil Management Collaborative Research Support Program. http://Pdf.Usaid.Gov/Pdf_docs/Pnada473.Pdf.
 
-van Raij B, Cantarella H, Quaggio JA, Furlani AMC. Recomendacoes de adubacao e
-calagem para o Estado de Sao Paulo. 2. ed. Campinas: IAC; 1996.
+van Raij B, Cantarella H, Quaggio JA, Furlani AMC. (1996). Recomendacoes de adubacao e
+calagem para o Estado de Sao Paulo. 2. ed. Campinas: IAC.
+
+Osmond, D.L., Smyth, T.J., Yost, R.S., Reid, W.S., Hoag, D.L., Branch, W., Li, H., 2002. Nutrient Management Support System (NuMaSS) v. 2. Soil Manag. Collab. Res. Support Program USA U. S. Agency Int. Dev. Soil Manag. Collab. Res. Support Program.
 
 Sanchez, P. A. (2019). Properties and Management of Soils in the Tropics. Cambridge University Press.
 
@@ -136,22 +138,22 @@ Teixeira, W. G., Victor Hugo Alvarez, V., & Neves, J. C. L. (2020). New methods 
 \examples{
 x <- data.frame(exch_ac = c(2:4,NA), ECEC = 5)
 
-limeRate(x, method = "ka", check_Ca = FALSE)
-limeRate(x, method = "co", check_Ca = FALSE, TAS = 15)
-limeRate(x, method = "li", check_Ca = FALSE, TAS = 15)
+limeRate(x, method = "Kamprath", check_Ca = FALSE)
+limeRate(x, method = "Cochrane", check_Ca = FALSE, TAS = 15)
+limeRate(x, method = "LiTAS", check_Ca = FALSE, TAS = 15)
 
 x$CEC_7 <- 10
-limeRate(x, method = "bv", check_Ca = FALSE, target_Ve = 50)
+limeRate(x, method = "BrazilV", check_Ca = FALSE, target_Ve = 50)
 
 library(terra)
 r <- rast(nrow=2, ncol=2, nl=3)
 values(r) <- as.matrix(x)
 names(r) <- names(x)
-rr <- limeRate(r, method = "ka", check_Ca = FALSE)
+rr <- limeRate(r, method = "Kamprath", check_Ca = FALSE)
 values(rr)
-rr <- limeRate(r, method = "co", check_Ca = FALSE, TAS = 15)
+rr <- limeRate(r, method = "Cochrane", check_Ca = FALSE, TAS = 15)
 values(rr)
-rr <- limeRate(r, method = "li", check_Ca = FALSE, TAS = 15)
+rr <- limeRate(r, method = "LiTAS", check_Ca = FALSE, TAS = 15)
 values(rr)
 }
 
