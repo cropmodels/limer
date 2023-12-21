@@ -19,8 +19,8 @@
   meth <- substr(meth, 1, 2)
   
 ## for backwards co  
-  if (meth %in% c("li", "ar")) {
-	meth <- "my"
+  if (meth == "my") {
+	meth <- "li"
   } else if (meth == "bv") {
 	meth <- "br"
   } else if (meth == "gt") {
@@ -79,7 +79,7 @@
   }
   
   ## Specific ----
-  if(meth %in% c("my", "co", "nu")){
+  if(meth %in% c("li", "co", "nu")){
     if(is.null(TAS)) stop("TAS is needed for this method")
   }
   
@@ -113,8 +113,8 @@
     lime <- .lr_nu(exch_ac = exch_ac, ECEC = ECEC, TAS = TAS, clay = clay)
   }
   
-  if(meth == "my"){
-    # message("using my method")
+  if(meth == "li"){
+    # message("using LiTAS method")
     lime <- .lr_my(exch_ac = exch_ac, ECEC = ECEC, TAS = TAS)
   }
   
