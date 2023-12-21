@@ -10,7 +10,7 @@
   
   ## General -----
   ## methods available
-  av.meth <- c("litas", "kamprath", "cochrane", "numass", "brazilv", "teixera")
+  av.meth <- c("litas", "kamprath", "cochrane", "numass", "brazilv", "teixeira")
 ## for backwards compatibility (to be removed?
   av.meth <- c(av.meth, "my", "bv", "gt")
   ## note that this uses partial matching such that "ka" is valid for "kamprath"
