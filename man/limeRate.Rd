@@ -25,7 +25,7 @@ Compute lime rate recommendations using one of several methods.
 \arguments{
   \item{x}{SpatRaster, data.frame or matrix (with column names) with soil data. SpatRaster layer names or data.frame/matrix column names must match the names of the variables used by each specific method. See details.}
   
-   \item{method}{character. The method (formula) used to compute lime recommendation. Should partially match one of \code{c("LiTAS", "Kamprath", "Cochrane", "NuMASS", "BrazilV", "Teixeira")}. The matching is case-insensitive.}
+   \item{method}{character. The method (formula) used to compute lime recommendation. Should partially match one of \code{c("LiTAS", "Kamprath", "Cochrane", "NuMASS", "BrazilV", "Goncalves")}. The matching is case-insensitive.}
   
   \item{unit}{character. Lime rate unit of the output. If \code{unit = "t/ha"} or \code{unit = "kg/ha"} lime rate is transformed with function \code{\link{convert}} and soil bulk density (\code{SBD}) must be specified.} 
   
@@ -37,7 +37,7 @@ Compute lime rate recommendations using one of several methods.
   
   \item{target_Ve}{numeric. Target base saturation after liming (\%). Needed for method \code{"BrazilV"}. If not provided, default values can be retrieved by \code{crop_type}}
      
-  \item{X}{Crop nutrient requirement for Calcium and Magnesium. Optional for method \code{"Teixeira"}}
+  \item{X}{Crop nutrient requirement for Calcium and Magnesium. Optional for method \code{"Goncalves"}}
     
   \item{crop_type}{One of \code{c("pasture", "cereal", "legume", "vegetable", "fruit")}. Optional to get default \code{target_Ve} values for method \code{"BrazilV"} (when target_Ve is not provided).}
   
@@ -50,12 +50,12 @@ Compute lime rate recommendations using one of several methods.
 \details{
   The available methods are:
   \itemize{
-    \item{\code{"LiTAS"}: Aramburu-Merlos et al. (2023)}
-    \item{\code{"Kamprath"}: Kamprath (1970)}
-    \item{\code{"Cochrane"}: Cochrane et al. (1980)}
-    \item{\code{"NuMaSS"}: NuMaSS.}
-    \item{\code{"BrazilV"}: Brazil V (van Raij 1996)}
-    \item{\code{"Teixeira"}: Teixeira et al. (2020).}
+    \item{\code{"LiTAS"}: Aramburu-Merlos et al., 2023}
+    \item{\code{"Kamprath"}: Kamprath, 1970}
+    \item{\code{"Cochrane"}: Cochrane et al., 1980}
+    \item{\code{"NuMaSS"}: Osmond et al., 2002}
+    \item{\code{"BrazilV"}: van Raij et al., 1996}
+    \item{\code{"Goncalves"}: Gonçalves Teixeira et al., 2020}
   }
   
   The minimum set of variables in \code{x} (SpatRaster layers or matrix/data.frame columns) needed for each method are shown in the following table. (Variable description and alternatives are listed below) 
@@ -67,7 +67,7 @@ Compute lime rate recommendations using one of several methods.
   \code{"NuMaSS"} \tab X \tab X \cr
   \code{"LiTAS"} \tab X \tab X \cr
   \code{"BrazilV"} \tab X \tab X \tab X  \cr
-  \code{"Teixeira"} \tab X \tab X \tab X \tab X \tab X \cr
+  \code{"Goncalves"} \tab X \tab X \tab X \tab X \tab X \cr
   
   }  
   
@@ -86,17 +86,17 @@ Compute lime rate recommendations using one of several methods.
     
     \item{\code{exch_Ca, exch_Mg, exch_K, exch_Na}}{Exchangeable Ca, Mg, K, and Na (meq/100g of soil).}
     
-    \item{\code{CEC_7}}{Cation exchange capacity buffered at pH 7 (meq/100g of soil). If not provided, it can be estimated from \code{exch_ac}, \code{ECEC}, \code{pot_ac}. Needed for methods \code{"BrazilV"} and \code{"Teixeira"}}
+    \item{\code{CEC_7}}{Cation exchange capacity buffered at pH 7 (meq/100g of soil). If not provided, it can be estimated from \code{exch_ac}, \code{ECEC}, \code{pot_ac}. Needed for methods \code{"BrazilV"} and \code{"Goncalves"}}
     
-    \item{\code{pot_ac}}{Potential acidity. If not provided, it can be estimated from \code{exch_ac}, \code{ECEC}, \code{CEC_7}. Needed for methods \code{"BrazilV"} and \code{"Teixeira"}}
+    \item{\code{pot_ac}}{Potential acidity. If not provided, it can be estimated from \code{exch_ac}, \code{ECEC}, \code{CEC_7}. Needed for methods \code{"BrazilV"} and \code{"Goncalves"}}
 
     \item{\code{clay}}{Clay fraction of the soil {0,1}. Optional for methods \code{"LiTAS"} and \code{"NuMaSS"}} 
 
-    \item{\code{pH}}{Soil pH(H2O), determined in a 1:2.5 (v:v) ratio. Required for method \code{"Teixeira"}}
+    \item{\code{pH}}{Soil pH(H2O), determined in a 1:2.5 (v:v) ratio. Required for method \code{"Goncalves"}}
     
-    \item{\code{OM}}{Soil organic matter content (g/kg). Required for method \code{"Teixeira"}}    
+    \item{\code{OM}}{Soil organic matter content (g/kg). Required for method \code{"Goncalves"}}    
     
-    \item{\code{X}}{Crop nutrient requirement for Calcium and Magnesium, optional for method \code{"Teixeira"}}
+    \item{\code{X}}{Crop nutrient requirement for Calcium and Magnesium, optional for method \code{"Goncalves"}}
     
   }
 }
@@ -116,18 +116,18 @@ Aramburu Merlos, F., Silva, J.V., Baudron, F., Hijmans, R.J. (2023). Estimating 
 
 Cochrane, T. T., Salinas, J. G., & Sanchez, P. A. (1980). An equation for liming acid mineral soils to compensate crop aluminium tolerance. Tropical Agriculture, Trinidad and Tobago, 57(2), 133-140.
 
+Gonçalves Teixeira, W., Victor Hugo Alvarez, V., & Lima Neves, J. C. (2020). New methods for estimating lime requirement to attain desirable pH values in Brazilian soils. Revista Brasileira de Ciencia Do Solo, 44.
+
 Kamprath, E. J. (1970). Exchangeable aluminum as a criterion for liming leached mineral soils. Soil Science Society of America Journal, 34(2), 252-254.
 
 Osmond, D. L., Smyth, T. J., Yost, R. S., Reid, W. S., Hoag, D. L., Branch, W., & Li, H. (2002). Nutrient Management Support System (NuMaSS) v. 2. Soil Management Collaborative Research Support Program. USA: United States Agency for International Development, Soil Management Collaborative Research Support Program. http://Pdf.Usaid.Gov/Pdf_docs/Pnada473.Pdf.
 
-van Raij B, Cantarella H, Quaggio JA, Furlani AMC. (1996). Recomendacoes de adubacao e
+van Raij B, Cantarella H, Quaggio JA, Furlani AMC., 1996. Recomendacoes de adubacao e
 calagem para o Estado de Sao Paulo. 2. ed. Campinas: IAC.
 
 Osmond, D.L., Smyth, T.J., Yost, R.S., Reid, W.S., Hoag, D.L., Branch, W., Li, H., 2002. Nutrient Management Support System (NuMaSS) v. 2. Soil Manag. Collab. Res. Support Program USA U. S. Agency Int. Dev. Soil Manag. Collab. Res. Support Program.
 
 Sanchez, P. A. (2019). Properties and Management of Soils in the Tropics. Cambridge University Press.
-
-Teixeira, W. G., Victor Hugo Alvarez, V., & Neves, J. C. L. (2020). New methods for estimating lime requirement to attain desirable pH values in Brazilian soils. Revista Brasileira de Ciencia Do Solo, 44.
 }
 
 \seealso{

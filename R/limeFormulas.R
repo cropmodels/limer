@@ -10,9 +10,9 @@
   
   ## General -----
   ## methods available
-  av.meth <- c("litas", "kamprath", "cochrane", "numass", "brazilv", "teixeira")
+  av.meth <- c("litas", "kamprath", "cochrane", "numass", "brazilv", "goncalves")
 ## for backwards compatibility (to be removed?
-  av.meth <- c(av.meth, "my", "bv", "gt")
+  av.meth <- c(av.meth, "my", "bv", "gt", "te")
   ## note that this uses partial matching such that "ka" is valid for "kamprath"
   ## it gives an error if (length(av.meth) > 1) | (!meth %in% av.meth)
   meth <- match.arg(tolower(method), av.meth) 
@@ -23,8 +23,8 @@
 	meth <- "li"
   } else if (meth == "bv") {
 	meth <- "br"
-  } else if (meth == "gt") {
-	meth <- "te"
+  } else if (meth %in% c("te", "gt")) {
+	meth <- "go"
   }
   
 #  if(length(meth) > 1){
@@ -40,7 +40,7 @@
     }
   }
   
-  if(check_Ca & is.null(exch_Ca)){
+  if(check_Ca && is.null(exch_Ca)){
     stop("exch_Ca is needed to test for Ca deficiencies")
   }
   
@@ -57,8 +57,8 @@
     }
   }  
   
-  if(is.null(ECEC) & meth != "ka"){
-    if(is.null(exch_bases) & (is.null(exch_Ca) & is.null(exch_Mg) & is.null(exch_K) & is.null(exch_Na))){
+  if(is.null(ECEC) && (meth != "ka")){
+    if(is.null(exch_bases) && (is.null(exch_Ca) && is.null(exch_Mg) && is.null(exch_K) && is.null(exch_Na))){
       stop("exchangeable bases values should be provided when ECEC is missing")
     }
     if(!is.null(exch_bases)){
@@ -69,33 +69,12 @@
     }
   }
   
-  if(meth %in% c("br", "te")){
-    if(is.null(exch_bases)){
-      exch_bases <- ECEC - exch_ac  
-    }
-    if(is.null(CEC_7) & is.null(pot_ac)){
-      stop("CEC_7 or pot_ac is needed for this method")
-    }
-  }
   
   ## Specific ----
   if(meth %in% c("li", "co", "nu")){
     if(is.null(TAS)) stop("TAS is needed for this method")
   }
-  
-  if(meth == "br"){
-    if(is.null(target_Ve) & is.null(crop_type)){
-      stop("target base saturation (target_Ve) or crop type are needed for this method")
-    }
-  }
-  
-  if(meth == "te"){
-    if(is.null(pH)|is.null(OM)|is.null(pot_ac)){
-      stop("pH, OM, and pot_ac or CEC_7 are needed for Goncalvez Texeira method")
-    }
-  }
-  
-  
+    
   # compute lime requirement by method ######
   
   if(meth == "ka"){
@@ -118,21 +97,37 @@
     lime <- .lr_my(exch_ac = exch_ac, ECEC = ECEC, TAS = TAS)
   }
   
+  if(meth %in% c("br", "go")){
+    if(is.null(exch_bases)){
+      exch_bases <- ECEC - exch_ac  
+    }
+    if(is.null(CEC_7) && is.null(pot_ac)){
+      stop("CEC_7 or pot_ac is needed for this method")
+    }
+  }
     
   if(meth == "br"){
-    if(is.null(CEC_7) & !is.null(pot_ac)){
+   # message("using Brazil V method")
+    if(is.null(CEC_7)) { # & !is.null(pot_ac)){
       CEC_7 <- pot_ac + exch_bases
     }
-    # message("using Brazil V method")
+    if(is.null(target_Ve) && is.null(crop_type)){
+      stop("target base saturation (target_Ve) or crop type are needed for this method")
+    }  
     lime <- .lr_bv(exch_bases = exch_bases, CEC_7 = CEC_7, 
                    target_Ve = target_Ve, crop_type = crop_type)
   }
   
-  if(meth == "te"){
-    if(!is.null(pot_ac) & is.null(CEC_7)){
+  if(meth == "go"){
+    # message("using Goncalvez Teixeira method")
+    ## was: if(!is.null(pot_ac) & is.null(CEC_7)){
+    if(is.null(pot_ac)) { # & is.null(CEC_7)){
       pot_ac <- CEC_7 - exch_bases
     }
-    # message("using Goncalvez Teixeira method")
+  
+    if(is.null(pH) || is.null(OM)) { # |is.null(pot_ac)){
+      stop("pH, OM, and pot_ac or CEC_7 are needed for the Goncalvez method")
+    }
     lime <- .lr_gt(pH = pH, OM = OM, pot_ac = pot_ac, X = X, 
                    exch_Ca = exch_Ca, exch_Mg = exch_Mg)
   }
