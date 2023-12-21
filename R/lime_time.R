@@ -21,13 +21,16 @@ setMethod("maintenanceRate", signature(x="matrix"),
 )
 
 setMethod("maintenanceRate", signature(x="SpatRaster"), 
-	function(x, method="LiTAS", decay=0.25, acidification=0, ...) {
-		rate1 <- limeRate(x, method=method, ...)
+	function(x, method="LiTAS", decay=0.25, acidification=0, ..., filename="", overwrite=FALSE, wopt=list()) {
+		rate1 <- limeRate(x, method=method, ..., wopt=list())
 		exal <- x$ECEC * x$TAS / 100 
 		x$exch_ac <- min(x$exch_ac, exal + decay + acidification)
 		rate2 <- limeRate(x, method=method, ...)
 		out <- c(rate1, rate2)
 		names(out) <- c("initial", "maintenance")
+		if (filename != "") {
+			out <- terra::writeRaster(out, filename, overwrite=overwrite, wopt=wopt)
+		}
 		out
 	}
 )
@@ -75,7 +78,7 @@ setMethod("reacidification", signature(x="matrix"),
 
 
 setMethod("reacidification", signature(x="SpatRaster"), 
-	function(x, method="LiTAS", decay=0.25, acidification=0, years=10, ..., wopt=list()) {
+	function(x, method="LiTAS", decay=0.25, acidification=0, years=10, ..., filename="", overwrite=FALSE, wopt=list()) {
 		yrs <- if (length(years)==1) 1:years else years
 		rate <- limeRate(x, method=method, ...)
 		exal <- x$ECEC * x$TAS / 100 
@@ -84,15 +87,17 @@ setMethod("reacidification", signature(x="SpatRaster"),
 			exal <- min(exal, x$exch_ac)
 		} else {
 			exal <- exal + (yrs * (decay + acidification))
-			w <- which.lyr(exal > x$exch_ac)
+			w <- terra::which.lyr(exal > x$exch_ac)
 			exal <- min(exal, x$exch_ac)
-			add  <- init(rast(exal), acidification)
-			add  <- mask(add, w, updatevalue=0)
+			add  <- terra::init(terra::rast(exal), acidification)
+			add  <- terra::mask(add, w, updatevalue=0)
 			add  <- cumsum(add)
-			exal <- cover(exal, add)
+			exal <- terra::cover(exal, add)
 		}
-		out <- data.frame(yrs, exal)
-		colnames(out) <- c("year", apply(x, 1, \(i) paste(i, collapse="_")))
+		names(out) <- paste0("y_", yrs)
+		if (filename != "") {
+			out <- terra::writeRaster(out, filename, overwrite=overwrite, wopt=wopt)
+		}
 		out
 	}
 )

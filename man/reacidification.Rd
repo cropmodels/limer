@@ -17,7 +17,7 @@ See \code{\link{limeRate}} for details about the lime requirement method used.
 \usage{
 \S4method{reacidification}{data.frame}(x, method="LiTAS", decay=0.25, acidification=0, years=10, ...)
 
-\S4method{reacidification}{SpatRaster}(x, method="LiTAS", decay=0.25, acidification=0, years=10, ..., wopt=list())
+\S4method{reacidification}{SpatRaster}(x, method="LiTAS", decay=0.25, acidification=0, years=10, ..., filename="", overwrite=FALSE, wopt=list())
 }
 
 \arguments{
@@ -27,7 +27,10 @@ See \code{\link{limeRate}} for details about the lime requirement method used.
   \item{acidification}{numeric. The annual increase of Exch-Al from fertilizer use or other sources of soil acidification}
   \item{years}{positive integer indicating the years for which to compute soil Exch-Al}
   \item{...}{additional arguments passed to \code{\{limeRate}}
-  \item{wopt}{list with additional arguments passed for writing files as in \code{\link[terra]{writeRaster}}}
+
+  \item{filename}{character. Output filename (optional)}
+  \item{overwrite}{logical. If \code{TRUE}, \code{filename} is overwritten}
+  \item{wopt}{list with additional arguments for writing files as in \code{\link[terra]{writeRaster}}}
 
 }
 

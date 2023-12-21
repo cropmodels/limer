@@ -17,7 +17,7 @@ See \code{\link{limeRate}} for details about the lime requirement method used.
 \usage{
 \S4method{maintenanceRate}{data.frame}(x, method="LiTAS", decay=0.25, acidification=0, ...)
 
-\S4method{maintenanceRate}{SpatRaster}(x, method="LiTAS", decay=0.25, acidification=0, ..., wopt=list())
+\S4method{maintenanceRate}{SpatRaster}(x, method="LiTAS", decay=0.25, acidification=0, ..., filename="", overwrite=FALSE, wopt=list())
 }
 
 \arguments{
@@ -26,8 +26,10 @@ See \code{\link{limeRate}} for details about the lime requirement method used.
   \item{decay}{numeric. The re-acidification parameter indicating the annual increase of Exch-Al after liming up to reaching the amount of Exch-Al before liming}
   \item{acidification}{numeric. The annual increase of Exch-Al from fertilizer use or other sources of soil acidification}
   \item{...}{additional arguments passed to \code{\{limeRate}}
-  \item{wopt}{list with additional arguments passed for writing files as in \code{\link[terra]{writeRaster}}}
 
+  \item{filename}{character. Output filename (optional)}
+  \item{overwrite}{logical. If \code{TRUE}, \code{filename} is overwritten}
+  \item{wopt}{list with additional arguments for writing files as in \code{\link[terra]{writeRaster}}}
 }
 
 
