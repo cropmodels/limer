@@ -3,11 +3,11 @@ Type: Package
 Title: Acidic soil management for agriculture
 Version: 0.1-4
 Depends: R (>= 3.5.0)
-Date: 2023-12-20
+Date: 2023-12-24
 Imports: methods
 Author: Fernando Aramburu Merlos
 Maintainer: <faramburumerlos@gmail.com>
-Description: Functions to compute liming recommendations and predict soil and yield responses in acid soils. Package developed for the GAIA project. 
+Description: Functions to compute liming recommendations to alleviate soil acidity problems, and to predict soil and crop yield responses. This package was developed in support of the Guiding Acid soil management Investments in Africa project. 
 License: GPL (>=3)
 Encoding: UTF-8
 Suggests: 

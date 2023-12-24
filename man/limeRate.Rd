@@ -146,9 +146,7 @@ x$CEC_7 <- 10
 limeRate(x, method = "BrazilV", check_Ca = FALSE, target_Ve = 50)
 
 library(terra)
-r <- rast(nrow=2, ncol=2, nl=3)
-values(r) <- as.matrix(x)
-names(r) <- names(x)
+r <- rast(nrow=2, ncol=2, nl=3, vals=x, names=names(x))
 rr <- limeRate(r, method = "Kamprath", check_Ca = FALSE)
 values(rr)
 rr <- limeRate(r, method = "Cochrane", check_Ca = FALSE, TAS = 15)
