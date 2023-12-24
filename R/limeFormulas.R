@@ -94,7 +94,7 @@
   
   if(meth == "li"){
     # message("using LiTAS method")
-    lime <- .lr_my(exch_ac = exch_ac, ECEC = ECEC, TAS = TAS)
+    lime <- .lr_litas(exch_ac = exch_ac, ECEC = ECEC, TAS = TAS)
   }
   
   if(meth %in% c("br", "go")){
@@ -197,16 +197,14 @@
 
 
 # Aramburu Merlos et al. xxx
-.lr_my <- function(exch_ac, ECEC, TAS, a = 0.6, b = 0.2){
+.lr_litas <- function(exch_ac, ECEC, TAS, a = 0.6, b = 0.2){
   tas <- TAS/100
-  lf <- 1/(a + tas * (b-a))
-  lime <- lf * (exch_ac - tas * ECEC) 
-  return(lime)
+  lf <- 1/a + tas * (b-a))
+  pmax(0, lf * (exch_ac - tas * ECEC))
 }
 
 
 # Brazil V method (van Raij 1996) 
-
 .lr_bv <- function(exch_bases, CEC_7, target_Ve = NULL, crop_type){
   if(is.null(target_Ve)){
     Ve <- data.frame(ct = c("pasture", "cereal", "legume", "vegetable", "fruit"), 

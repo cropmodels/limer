@@ -9,13 +9,18 @@ Calcium carbonate equivalents
 }
 
 \description{
-Calcium carbonate equivalents. Adjuste CCE based on the mesh sizes of the product. \code{CCE} returns a table with CCE values for different lime products.
+Calcium carbonate equivalents. 
+
+\code{CCE} returns a table with CCE values for different lime products  (\href{https://extension.psu.edu/soil-acidity-and-aglime}{source})
+
+Adjust CCE based on the mesh sizes of the product. 
 }
 
 
 \usage{
-CCE_adjust_size(CCE, fine, medium)
 CCE()
+
+CCE_adjust_size(CCE, fine, medium)
 }
  
 \arguments{
@@ -24,3 +29,9 @@ CCE()
   \item{medium}{fraction between between 8- and 60-mesh size}
 }
 
+
+\examples{
+CCE()
+
+CCE_adjust_size(100, 0.6, 0.4)
+}
