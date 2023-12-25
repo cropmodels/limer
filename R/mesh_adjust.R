@@ -1,3 +1,4 @@
+#https://extension.psu.edu/media/wysiwyg//extensions/catalog_product/6defa07cdbee4061809612d041f2c89c/e/f/effect-of-aglime-fineness-on-speed-of-reaction.jpg
 
 .litas_inverse <- function(lime, exch_ac, ECEC) {
 	e <- exch_ac - 0.6 * lime
