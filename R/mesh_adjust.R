@@ -1,12 +1,16 @@
 #https://extension.psu.edu/media/wysiwyg//extensions/catalog_product/6defa07cdbee4061809612d041f2c89c/e/f/effect-of-aglime-fineness-on-speed-of-reaction.jpg
 
+
 .litas_inverse <- function(lime, exch_ac, ECEC) {
+# estimate exch_ac for a lime application
 	e <- exch_ac - 0.6 * lime
     0.03775 + 0.07448*exch_ac -0.03546 * ECEC + 1.18901*e + 0.07343*exch_ac*e + -0.14587*e*e
 }
 
 
 .mesh_effect <- function(mesh) {
+# relative effect of mesh size on (timing of) peak change in exch_ac
+# for mesh=100, rel_effect is 1, and peak is 6 at months after application
 	rel_effect <- pmax(0, -0.3096 + 0.02243 * mesh + -0.00009334 * mesh^2)
 	peak <- (60 -1.064*mesh + 0.00524 * mesh^2) / 12
 	cbind(rel_effect, peak)
@@ -14,6 +18,7 @@
 
 
 .reaction_time <- function(lime, mesh, exch_ac, ECEC, decay=0.25) {
+# exch_ac over time, given a lime application and mesh_size
 	m <- .mesh_effect(mesh)
 	exac100 <- .litas_inverse(lime, exch_ac, ECEC)
 	exac <- exch_ac - (exch_ac - exac100) * m[,1]
