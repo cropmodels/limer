@@ -199,7 +199,7 @@
 # Aramburu Merlos et al. xxx
 .lr_litas <- function(exch_ac, ECEC, TAS, a = 0.6, b = 0.2){
   tas <- TAS/100
-  lf <- 1/a + tas * (b-a))
+  lf <- 1/(a + tas * (b-a))
   pmax(0, lf * (exch_ac - tas * ECEC))
 }
 
