@@ -27,7 +27,7 @@ setMethod("acidification", signature(x="data.frame"),
 				if (any(j)) {
 					d[j] <- x$exch_ac[i] + (1:sum(j))*acidification
 				}
-				d
+				pmin(d, x$ECEC[i])
 			})
 		}
 		out <- data.frame(yrs, exal)
