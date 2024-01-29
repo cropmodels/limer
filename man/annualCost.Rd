@@ -1,7 +1,7 @@
-\name{annualizedCost}
-\alias{annualizedCost}
-\alias{annualizedCost,numeric,numeric-method}
-\alias{annualizedCost,SpatRaster,ANY-method}
+\name{annualCost}
+\alias{annualCost}
+\alias{annualCost,numeric,numeric-method}
+\alias{annualCost,SpatRaster,ANY-method}
 
 \title{
 Annualized cost of liming
@@ -9,13 +9,13 @@ Annualized cost of liming
 
 
 \description{
-Annualized cost of liming for the initial number of years in which you pay off the initial amount of lime needed. After that period you only have the maintenance cost.
+Annual cost of liming for the initial number of years in which you pay off the initial amount of lime needed. After that period you only have the maintenance cost.
 }
 
 \usage{
-\S4method{annualizedCost}{numeric, numeric}(initial, maintenance, interest_rate, nyears)
+\S4method{annualCost}{numeric, numeric}(initial, maintenance, interest_rate, nyears)
 
-\S4method{annualizedCost}{SpatRaster, ANY}(initial, maintenance, interest_rate, nyears, filename="", overwrite=FALSE, ...)
+\S4method{annualCost}{SpatRaster, ANY}(initial, maintenance, interest_rate, nyears, filename="", overwrite=FALSE, ...)
 }
 
 \arguments{
@@ -38,14 +38,14 @@ numeric or SpatRaster
 
 
 \examples{
-annualizedCost(initial=c(50,100), maintenance=20, interest=0.1, nyears=5)
+annualCost(initial=c(50,100), maintenance=20, interest=0.1, nyears=5)
 
 library(terra)
 x <- data.frame(exch_ac=c(2:4,NA), ECEC=5)
 r <- rast(nrow=2, ncol=2, nl=2, vals=x, names=names(x))
 rr <- maintenanceRate(r, check_Ca=FALSE, TAS=15)
 
-z <- annualizedCost(initial=rr[[1]], maintenance=rr[[2]], interest=0.1, nyears=5)
+z <- annualCost(initial=rr[[1]], maintenance=rr[[2]], interest=0.1, nyears=5)
 
 }
 

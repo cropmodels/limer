@@ -1,9 +1,9 @@
 
 
-if (!isGeneric("annualizedCost")) {setGeneric("annualizedCost", function(initial, maintenance, ...) standardGeneric("annualizedCost"))}
+if (!isGeneric("annualCost")) {setGeneric("annualCost", function(initial, maintenance, ...) standardGeneric("annualCost"))}
 
 
-setMethod("annualizedCost", signature(initial="numeric", maintenance="numeric"), 
+setMethod("annualCost", signature(initial="numeric", maintenance="numeric"), 
 	function(initial, maintenance, interest_rate, nyears) {
 
 		stopifnot((interest_rate >= 0) & (interest_rate < 100))
@@ -29,7 +29,7 @@ setMethod("annualizedCost", signature(initial="numeric", maintenance="numeric"),
 )
 
  
-setMethod("annualizedCost", signature(initial="SpatRaster", maintenance="ANY"), 
+setMethod("annualCost", signature(initial="SpatRaster", maintenance="ANY"), 
 	function(initial, maintenance, interest_rate, nyears) {
 		stopifnot((interest_rate >= 0) & (interest_rate < 1))
 		interest_rate <- interest_rate / 100
