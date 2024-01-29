@@ -1,9 +1,9 @@
 Package: limer
 Type: Package
 Title: Acidic soil management for agriculture
-Version: 0.1-4
+Version: 0.1-5
 Depends: R (>= 3.5.0)
-Date: 2023-12-24
+Date: 2024-01-29
 Imports: methods
 Author: Fernando Aramburu Merlos
 Maintainer: <faramburumerlos@gmail.com>
