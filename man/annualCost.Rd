@@ -38,14 +38,14 @@ numeric or SpatRaster
 
 
 \examples{
-annualCost(initial=c(50,100), maintenance=20, interest=0.1, nyears=5)
+annualCost(initial=c(50,100), maintenance=20, interest=10, nyears=5)
 
 library(terra)
 x <- data.frame(exch_ac=c(2:4,NA), ECEC=5)
 r <- rast(nrow=2, ncol=2, nl=2, vals=x, names=names(x))
 rr <- maintenanceRate(r, check_Ca=FALSE, TAS=15)
 
-z <- annualCost(initial=rr[[1]], maintenance=rr[[2]], interest=0.1, nyears=5)
+z <- annualCost(initial=rr[[1]], maintenance=rr[[2]], interest=10, nyears=5)
 
 }
 
