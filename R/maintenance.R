@@ -16,7 +16,7 @@ setMethod("maintenanceRate", signature(x="data.frame"),
 		maintenance <- limeRate(x, method=method, TAS=TAS, ...)
 		out <- rbind(initial, maintenance)
 		colnames(out) <- soils
-		cbind(x, t(out))
+		out
 	}
 )
 
