@@ -30,7 +30,7 @@ setMethod("annualCost", signature(initial="numeric", maintenance="numeric"),
 
  
 setMethod("annualCost", signature(initial="SpatRaster", maintenance="ANY"), 
-	function(initial, maintenance, interest_rate, nyears) {
+	function(initial, maintenance, interest_rate, nyears, filename="", overwrite=FALSE, ...) {
 		stopifnot(interest_rate >= 0)
 		interest_rate <- interest_rate / 100
 		stopifnot(nyears > 0)
@@ -40,12 +40,70 @@ setMethod("annualCost", signature(initial="SpatRaster", maintenance="ANY"),
 		}
 		initial <- max(initial - maintenance, 0)
 		if (interest_rate == 0) {
-			maintenance + initial / nyears
+			out <- maintenance + initial / nyears
 		} else {
 			interest_pay <- initial * interest_rate
 			principal_pay <- interest_rate * initial / ((1+interest_rate)^nyears - 1)
-			principal_pay + interest_pay + maintenance * (1 + interest_rate/2)
+			out <- principal_pay + interest_pay + maintenance * (1 + interest_rate/2)
 		}
+		if (filename != "") {
+			out <- writeRaster(out, filename, overwrite=overwrite, ...)
+		} 
+		out
+	}
+)
+
+
+
+
+
+
+if (!isGeneric("profit")) {setGeneric("profit", function(cost, benefit, ...) standardGeneric("profit"))}
+
+
+setMethod("profit", signature(cost="numeric", benefit="numeric"), 
+	function(cost, benefit, nyears, interest_rate) {
+
+		stopifnot(interest_rate >= 0)
+		interest_rate <- interest_rate / 100
+		stopifnot((cost >= 0) & (benefit >= 0) & (nyears > 0))
+		# only compute for the first year, as the total amount will be the same
+		# for all years (while the balance between principal and interest changes)
+		if (interest_rate == 0) {
+			pay <- cost / nyears
+		} else {
+			interest_pay <- cost * interest_rate
+			principal_pay <- interest_rate * cost / ((1+interest_rate)^nyears - 1)
+			pay <- principal_pay + interest_pay
+		}
+		# average proportion of benefit 
+		avgben <- mean(seq(0, 1, 1/(nyears+1))[-1])
+		avgben * benefit - pay
+	}
+)
+
+ 
+setMethod("profit", signature(cost="SpatRaster", benefit="SpatRaster"), 
+	function(cost, benefit, nyears, interest_rate, filename="", overwrite=FALSE, ...) {
+		stopifnot(inherits(nyears, "SpatRaster"))
+		stopifnot(inherits(interest_rate, "numeric")) {
+			stopifnot(maintenance >= 0)
+		}
+		stopifnot(interest_rate >= 0)
+		interest_rate <- interest_rate / 100
+		if (interest_rate == 0) {
+			pay <- cost / nyears
+		} else {
+			interest_pay <- cost * interest_rate
+			principal_pay <- interest_rate * cost / ((1+interest_rate)^nyears - 1)
+			pay <- principal_pay + interest_pay
+		}
+		avgben <- mean(seq(0, 1, 1/(nyears+1))[-1])
+		out <- avgben * benefit / 2  - pay
+		if (filename != "") {
+			out <- writeRaster(out, filename, overwrite=overwrite, ...)
+		}
+		out
 	}
 )
 
