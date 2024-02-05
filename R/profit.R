@@ -18,7 +18,7 @@ setMethod("profit", signature(cost="numeric", benefit="numeric"),
 			pay <- principal_pay + interest_pay
 		}
 		# average proportion of benefit 
-		avgben <- mean(seq(0, 1, 1/(nyears+1))[-1])
+		avgben <- sapply(nyears, \(n) mean(seq(0, 1, 1/(n+1))[-1])
 		avgben * benefit - pay
 	}
 )
@@ -39,7 +39,7 @@ setMethod("profit", signature(cost="SpatRaster", benefit="SpatRaster"),
 		}
 		s <- sapply(1:50, \(n) mean(seq(0, 1, 1/(n+1))[-1]))
 		avgben <- subst(nyears, 1:50, s, 0.5)
-		out <- avgben * benefit  - pay
+		out <- avgben * benefit - pay
 		if (filename != "") {
 			out <- writeRaster(out, filename, overwrite=overwrite, ...)
 		}

@@ -22,7 +22,7 @@ Profit of liming considering the number of years over which it has an effect. Th
   \item{cost}{numeric or SpatRaster. The cost of liming to bring the soil to a target. The cost can be in any currency and unit}
   \item{benefit}{numeric or SpatRaster. The benefit in terms of the value of crop production when the soil is brought to the target} 
   
-  \item{nyears}{positive integer. The number of years over which liming has an effect}
+  \item{nyears}{same class as \code{cost} and \code{benefit}. The number of years over which liming has an effect}
 
   \item{interst_raste}{numeric. The interest rate (\%)}
 
