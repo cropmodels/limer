@@ -7,13 +7,19 @@ setMethod("maintenanceRate", signature(x="data.frame"),
 		initial <- limeRate(x, method=method, TAS=TAS, ...)
 		soils <- apply(x, 1, \(i) paste(i, collapse="_"))
 		exal <- x$ECEC * TAS / 100 
+#		if (adjECEC) {
+#			# ecec increases with (.92 - .6) * limerate
+#			x$ECEC <- x$ECEC + initial * 0.32
+#			exal <- x$ECEC * TAS / 100 
+#		}
 		x$exch_ac <- pmin(x$exch_ac, exal + decay + acidification)
 		maintenance <- limeRate(x, method=method, TAS=TAS, ...)
 		out <- rbind(initial, maintenance)
 		colnames(out) <- soils
-		out
-	} 
+		cbind(x, t(out))
+	}
 )
+
 
 setMethod("maintenanceRate", signature(x="matrix"), 
 	function(x, TAS, decay=0.25, acidification=0, method="LiTAS", ...) {

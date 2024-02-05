@@ -31,7 +31,7 @@ See \code{\link{limeRate}} for details about the lime requirement method used.
 
   \item{method}{character. The method used to compute lime recommendation with \code{\link{limeRate}}. This must be a method that uses target Al saturation (TAS), that is, one of \code{c("LiTAS", "Cochrane", "NuMASS")}}
 
-  \item{...}{additional arguments passed to \code{\{limeRate}}
+  \item{...}{additional arguments passed to \code{\link{limeRate}}}
 
   \item{filename}{character. Output filename (optional)}
   \item{overwrite}{logical. If \code{TRUE}, \code{filename} is overwritten}
