@@ -24,7 +24,9 @@ Profit of liming considering the number of years over which it has an effect. Th
   
   \item{nyears}{same class as \code{cost} and \code{benefit}. The number of years over which liming has an effect}
 
-  \item{interst_raste}{numeric. The interest rate (\%)}
+  \item{interst_rate}{numeric. The interest rate (\%)}
+
+  \item{maintain}{logical. Apply a yearly maintenance lime rate?}
 
   \item{filename}{character. Output filename (optional)}
   \item{overwrite}{logical. If \code{TRUE}, \code{filename} is overwritten}
