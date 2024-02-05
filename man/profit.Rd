@@ -45,6 +45,5 @@ x <- data.frame(cost=rep(c(50,100), 8), benefit=75, nyears=rep(c(3,5), each=8))
 r <- rast(nrow=4, ncol=4, nl=3, vals=x, names=names(x))
 
 z <- profit(r$cost, r$benefit, r$nyears, interest=10)
-
 }
 

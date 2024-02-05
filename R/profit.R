@@ -37,8 +37,9 @@ setMethod("profit", signature(cost="SpatRaster", benefit="SpatRaster"),
 			principal_pay <- interest_rate * cost / ((1+interest_rate)^nyears - 1)
 			pay <- principal_pay + interest_pay
 		}
-		avgben <- mean(seq(0, 1, 1/(nyears+1))[-1])
-		out <- avgben * benefit / 2  - pay
+		s <- sapply(1:50, \(n) mean(seq(0, 1, 1/(n+1))[-1]))
+		avgben <- subst(nyears, 1:50, s, 0.5)
+		out <- avgben * benefit  - pay
 		if (filename != "") {
 			out <- writeRaster(out, filename, overwrite=overwrite, ...)
 		}
