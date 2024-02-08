@@ -8,7 +8,7 @@
 
 
 
-if (!isGeneric("NPV_lime")) {setGeneric("NPV", function(x, ...) standardGeneric("NPV"))}
+if (!isGeneric("NPV_lime")) {setGeneric("NPV_lime", function(x, ...) standardGeneric("NPV_lime"))}
 
 
 setMethod("NPV_lime", signature(x="numeric"), 
