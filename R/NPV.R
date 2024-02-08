@@ -15,9 +15,9 @@ setMethod("NPV_lime", signature(x="numeric"),
 	function(x, nyears, discount_rate) {
 		stopifnot(discount_rate >= 0)
 		discount_rate <- discount_rate / 100
-		stopifnot((benefit >= 0) & (nyears > 0))
+		stopifnot((x >= 0) & (nyears > 0))
 		nyears <- pmax(1, round(nyears))
-		.npv(benefit, nyears, discount_rate, maintain)
+		.npv(x, nyears, discount_rate, maintain)
 	}
 )
 
@@ -33,7 +33,7 @@ setMethod("NPV_lime", signature(x="SpatRaster"),
 		stopifnot(discount_rate >= 0)
 		discount_rate <- discount_rate / 100
 		nyears <- max(round(nyears), 1)
-		npv <- lapp(c(benefit, nyears), .npvSR, discount_rate=discount_rate, maintain=maintain)
+		npv <- lapp(c(x, nyears), .npvSR, discount_rate=discount_rate, maintain=maintain)
 		
 		if (filename != "") {
 			npv <- writeRaster(npv, filename, overwrite=overwrite, ...)
