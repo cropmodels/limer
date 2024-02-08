@@ -47,7 +47,7 @@ setMethod("annualCost", signature(initial="SpatRaster", maintenance="ANY"),
 			out <- principal_pay + interest_pay + maintenance * (1 + interest_rate/2)
 		}
 		if (filename != "") {
-			out <- writeRaster(out, filename, overwrite=overwrite, ...)
+			out <- terra::writeRaster(out, filename, overwrite=overwrite, ...)
 		} 
 		out
 	}

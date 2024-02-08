@@ -1,7 +1,7 @@
 \name{NPV}
 \alias{NPV_lime}
-\alias{NPV_lime,numeric,numeric-method}
-\alias{NPV_lime,SpatRaster,SpatRaster-method}
+\alias{NPV_lime,numeric-method}
+\alias{NPV_lime,SpatRaster-method}
 
 \title{
 Net present value of liming
@@ -13,9 +13,9 @@ Net present value (NPV) of liming considering the number of years over which it 
 }
 
 \usage{
-\S4method{NPV_lime}{numeric, numeric}(x, nyears, discount_rate)
+\S4method{NPV_lime}{numeric}(x, nyears, discount_rate)
 
-\S4method{NPV_lime}{SpatRaster, SpatRaster}(x, nyears, discount_rate, filename="", overwrite=FALSE, ...)
+\S4method{NPV_lime}{SpatRaster}(x, nyears, discount_rate, filename="", overwrite=FALSE, ...)
 }
 
 \arguments{
@@ -24,8 +24,6 @@ Net present value (NPV) of liming considering the number of years over which it 
   \item{nyears}{same class as \code{cost} and \code{benefit}. The number of years over which liming has an effect (linearly decreasing and zero at (nyears+1)}
 
   \item{discount_rate}{numeric. The annual discount rate (\%) used to reduce future income}
-
-  \item{maintain}{logical. Apply a yearly maintenance lime rate?}
 
   \item{filename}{character. Output filename (optional)}
   \item{overwrite}{logical. If \code{TRUE}, \code{filename} is overwritten}

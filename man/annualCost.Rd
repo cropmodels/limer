@@ -1,4 +1,5 @@
 \name{annualCost}
+
 \alias{annualCost}
 \alias{annualCost,numeric,numeric-method}
 \alias{annualCost,SpatRaster,ANY-method}
