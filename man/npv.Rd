@@ -42,6 +42,7 @@ NPV_lime(50, nyears=5, discount_rate=10)
 library(terra)
 x <- data.frame(benefit=rep(c(25, 50, 75, 100), 4), nyears=rep(c(3,5), each=8))
 r <- rast(nrow=4, ncol=4, nl=2, vals=x, names=names(x))
+r[10] <- NA
 
 z <- NPV_lime(r$benefit, r$nyears, discount_rate=10)
 }

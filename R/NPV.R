@@ -1,6 +1,7 @@
 
 
 .npv <- function(benefit, nyears, discount_rate) {
+	if (is.na(nyears)) return(NA)
 	decay <- rev(seq(0, 1, 1/nyears)[-1])
 	discount <- ((1 + discount_rate)^(1:nyears))
 	sum(decay * benefit/discount)
