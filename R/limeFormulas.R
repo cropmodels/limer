@@ -57,19 +57,18 @@
     }
   }  
   
-  if(is.null(ECEC) && (meth != "ka")){
-    if(is.null(exch_bases) && (is.null(exch_Ca) && is.null(exch_Mg) && is.null(exch_K) && is.null(exch_Na))){
-      stop("exchangeable bases values should be provided when ECEC is missing")
-    }
-    if(!is.null(exch_bases)){
+  if (is.null(ECEC) && (meth != "ka")) {
+    if (!is.null(exch_bases)){
       ECEC <- exch_ac + exch_bases
     } else {
-      m <- cbind(exch_Ca, exch_Mg, exch_K, exch_Na)
-      ECEC <- rowSums(m) + exch_ac  
+		if (is.null(exch_Ca) || is.null(exch_Mg) || is.null(exch_K) || is.null(exch_Na)) {
+			stop("exchangeable bases values should be provided when ECEC is missing")
+		}
+		m <- cbind(exch_Ca, exch_Mg, exch_K, exch_Na)
+		ECEC <- rowSums(m) + exch_ac  
     }
   }
-  
-  
+    
   ## Specific ----
   if(meth %in% c("li", "co", "nu")){
     if(is.null(TAS)) stop("TAS is needed for this method")

@@ -7,6 +7,13 @@
     0.03775 + 0.07448*exch_ac -0.03546 * ECEC + 1.18901*e + 0.07343*exch_ac*e + -0.14587*e*e
 }
 
+# Aramburu Merlos et al. xxx
+.lr_litas <- function(exch_ac, ECEC, TAS, a = 0.6, b = 0.2){
+  tas <- TAS/100
+  lf <- 1/(a + tas * (b-a))
+  pmax(0, lf * (exch_ac - tas * ECEC))
+}
+
 
 .mesh_effect <- function(mesh) {
 # relative effect of mesh size on (timing of) peak change in exch_ac
