@@ -6,7 +6,7 @@ setMethod("limeRate", signature(x="SpatRaster"),
 	         TAS = NULL, target_Ve = NULL, X = NULL, crop_type = NULL, ..., filename="", overwrite=FALSE, wopt=list())  {
 		terra::lapp(x, fun = .lr, usenames=TRUE, 
 		            method=method, unit=unit, check_Ca=check_Ca, SD=SD,
-		            TAS=TAS, target_Ve=target_Ve, X=X, crop_type=crop_type, filename=filename, overwrite=overwrite, wopt=wopt )
+		            TAS=TAS, target_Ve=target_Ve, X=X, crop_type=crop_type, ..., filename=filename, overwrite=overwrite, wopt=wopt )
 
 		#out <- rast(x, nlyrs=1)
 		#setValues(out, limeRate(values(x), method=method, unit=unit, check_Ca=check_Ca, SD=SD))
