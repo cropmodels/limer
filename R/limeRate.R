@@ -3,10 +3,10 @@ if (!isGeneric("limeRate")) {setGeneric("limeRate", function(x, ...) standardGen
 
 setMethod("limeRate", signature(x="SpatRaster"), 
 	function(x, method, unit = "meq/100g", check_Ca=TRUE, SD = 20,
-	         TAS = NULL, target_Ve = NULL, X = NULL, crop_type = NULL, filename="", overwrite=FALSE, ...)  {
+	         TAS = NULL, target_Ve = NULL, X = NULL, crop_type = NULL, ..., filename="", overwrite=FALSE, wopt=list())  {
 		terra::lapp(x, fun = .lr, usenames=TRUE, 
 		            method=method, unit=unit, check_Ca=check_Ca, SD=SD,
-		            TAS=TAS, target_Ve=target_Ve, X=X, crop_type=crop_type, filename=filename, overwrite=overwrite, wopt=list(...))
+		            TAS=TAS, target_Ve=target_Ve, X=X, crop_type=crop_type, filename=filename, overwrite=overwrite, wopt=wopt )
 
 		#out <- rast(x, nlyrs=1)
 		#setValues(out, limeRate(values(x), method=method, unit=unit, check_Ca=check_Ca, SD=SD))
