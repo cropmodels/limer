@@ -90,7 +90,7 @@ Compute lime rate recommendations using one of several methods.
     
     \item{\code{pot_ac}}{Potential acidity. If not provided, it can be estimated from \code{exch_ac}, \code{ECEC}, \code{CEC_7}. Needed for methods \code{"BrazilV"} and \code{"Goncalves"}}
 
-    \item{\code{clay}}{Clay fraction of the soil {0,1}. Optional for methods \code{"LiTAS"} and \code{"NuMaSS"}} 
+    \item{\code{clay}}{Clay fraction of the soil, between 0 and 1. Optional for methods \code{"LiTAS"} and \code{"NuMaSS"}} 
 
     \item{\code{pH}}{Soil pH(H2O), determined in a 1:2.5 (v:v) ratio. Required for method \code{"Goncalves"}}
     

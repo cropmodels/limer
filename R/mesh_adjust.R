@@ -1,4 +1,6 @@
+
 #https://extension.psu.edu/media/wysiwyg//extensions/catalog_product/6defa07cdbee4061809612d041f2c89c/e/f/effect-of-aglime-fineness-on-speed-of-reaction.jpg
+
 
 
 .litas_inverse <- function(lime, exch_ac, ECEC) {
@@ -7,12 +9,6 @@
     0.03775 + 0.07448*exch_ac -0.03546 * ECEC + 1.18901*e + 0.07343*exch_ac*e + -0.14587*e*e
 }
 
-# Aramburu Merlos et al. xxx
-.lr_litas <- function(exch_ac, ECEC, TAS, a = 0.6, b = 0.2){
-  tas <- TAS/100
-  lf <- 1/(a + tas * (b-a))
-  pmax(0, lf * (exch_ac - tas * ECEC))
-}
 
 
 .mesh_effect <- function(mesh) {
