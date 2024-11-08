@@ -44,7 +44,11 @@ setMethod("limeEffect", signature(x="SpatRaster"),
 
 setMethod("limeEffect", signature(x="data.frame"), 
 	function(x, lime_rate, ...) {
-		sapply(1:nrow(x), function(i) .inverse_litas(lime_rate[1], x$exch_ac[i], x$ECEC[i], x$SBD[i], ...))
+		if (!is.null(x$SD)) {
+			sapply(1:nrow(x), function(i) .inverse_litas(lime_rate[1], x$exch_ac[i], x$ECEC[i], x$SBD[i], x$SD[i], ...))		
+		} else {
+			sapply(1:nrow(x), function(i) .inverse_litas(lime_rate[1], x$exch_ac[i], x$ECEC[i], x$SBD[i], ...))
+		}
 	}
 )
 
