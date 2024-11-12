@@ -4,9 +4,7 @@
 \alias{annualCost,numeric,numeric-method}
 \alias{annualCost,SpatRaster,ANY-method}
 
-\title{
-Annualized cost of liming
-}
+\title{Annualized cost of liming}
 
 
 \description{
@@ -14,16 +12,15 @@ Annual cost of liming for the initial number of years in which you pay off the i
 }
 
 \usage{
-\S4method{annualCost}{numeric, numeric}(initial, maintenance, interest_rate, nyears)
-
-\S4method{annualCost}{SpatRaster, ANY}(initial, maintenance, interest_rate, nyears, filename="", overwrite=FALSE, ...)
+\S4method{annualCost}{numeric,numeric}(initial, maintenance, interest_rate, nyears)
+\S4method{annualCost}{SpatRaster,ANY}(initial, maintenance, interest_rate, nyears, filename="", overwrite=FALSE, ...)
 }
 
 \arguments{
   \item{initial}{numeric or SpatRaster. The initial cost of liming to bring the soil to a target aluminum saturation. The cost can be in any currency and unit}
   \item{maintenance}{numeric or SpatRaster. The annual maintenance cost of liming to keep the soil to a target aluminum saturation} 
   
-  \item{interst_raste}{numeric. The interest rate (\%)}
+  \item{interest_rate}{numeric. The interest rate (\%)}
 
   \item{nyears}{positive integer. The number of years over which to pay off the initial lime rate}
 
@@ -47,6 +44,5 @@ r <- rast(nrow=2, ncol=2, nl=2, vals=x, names=names(x))
 rr <- maintenanceRate(r, check_Ca=FALSE, TAS=15)
 
 z <- annualCost(initial=rr[[1]], maintenance=rr[[2]], interest=10, nyears=5)
-
 }
 

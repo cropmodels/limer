@@ -16,7 +16,7 @@ Compute the effect of lime on Al saturation
 
 \S4method{limeEffect}{SpatRaster}(x, lime_rate, ..., filename="", overwrite=FALSE, wopt = list())
 
-\S4method{limeEffect}{data.frame}(x)
+\S4method{limeEffect}{data.frame}(x, lime_rate, ...)
 }
 
 \arguments{

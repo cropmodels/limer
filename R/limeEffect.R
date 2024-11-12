@@ -34,7 +34,7 @@ setMethod("limeEffect", signature(x="SpatRaster"),
 		out <- terra::rast(x, nlyr=1)
 		terra::values(out) <- limeEffect(as.data.frame(x, na.rm=FALSE), lime_rate=lime_rate, ...)
 		if (filename != "") {
-			out <- writeRaster(out, filename, overwrite=overwrite, wopt=wopt)
+			out <- terra::writeRaster(out, filename, overwrite=overwrite, wopt=wopt)
 		}
 		out
 		
