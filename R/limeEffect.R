@@ -1,15 +1,15 @@
 
 # Aramburu Merlos et al. 2023
 .lr_litas_convert <- function(exch_ac, ECEC, TAS, SBD, SD=20, a = 0.6, b = 0.2){
-  tas <- TAS/100
-  lf <- 1/(a + tas * (b-a))
-  x <- lf * (exch_ac - tas * ECEC)
-  (x * SD * SBD)/20
+	tas <- TAS/100
+	lf <- 1/(a + tas * (b-a))
+	x <- lf * (exch_ac - tas * ECEC)
+	(x * SD * SBD)/20
 }
 
 
 .inverse_litas <- function(lime_rate, exch_ac, ECEC, SBD, ...) {
-	TAS <- seq(0,100,2)
+	TAS <- seq(0, 100, 2)
 	LR <- .lr_litas_convert(exch_ac=exch_ac, ECEC=ECEC, TAS=TAS, SBD=SBD, ...)
 	if (any(is.na(LR))) {
 		return(NA)
@@ -32,7 +32,7 @@ setMethod("limeEffect", signature(x="SpatRaster"),
 			}
 		}
 		out <- terra::rast(x, nlyr=1)
-		terra::values(out) <- limeEffect(data.frame(x), lime_rate=lime_rate, ...)
+		terra::values(out) <- limeEffect(as.data.frame(x, na.rm=FALSE), lime_rate=lime_rate, ...)
 		if (filename != "") {
 			out <- writeRaster(out, filename, overwrite=overwrite, wopt=wopt)
 		}
@@ -41,6 +41,7 @@ setMethod("limeEffect", signature(x="SpatRaster"),
 #		terra::lapp(x, fun = .inverse_litas, usenames=TRUE, lime_rate=lime_rate, ..., filename=filename, overwrite=overwrite, wopt=wopt )
 	}
 )
+
 
 setMethod("limeEffect", signature(x="data.frame"), 
 	function(x, lime_rate, ...) {
@@ -53,7 +54,7 @@ setMethod("limeEffect", signature(x="data.frame"),
 )
 
 setMethod("limeEffect", signature(x="matrix"), 
-	function(x)  {
-		limeEffect(as.data.frame(x))
+	function(x, lime_rate, ...)  {
+		limeEffect(as.data.frame(x), lime_rate=lime_rate, ...)
 	}
 )
