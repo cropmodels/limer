@@ -1,4 +1,3 @@
 import(methods)
-#export(acidification_equivalents, CCE, CCE_adjust_size, CCE_adjust_depth, convert, lr, lr_bv, lr_co, lr_gt, lr_ka, lr_my, lr_nu, limeRate, limeEffect)
 exportPattern("^[^\\.\\_]")
 
