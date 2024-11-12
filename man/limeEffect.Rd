@@ -9,7 +9,7 @@ Effect of lime on Al saturation
 }
 
 \description{
-Compute the effect of lime on Al saturation
+Compute the effect of lime on Al saturation. This is computed by inverting the LiTAS model.
 }
 
 \usage{
@@ -41,6 +41,8 @@ Compute the effect of lime on Al saturation
 
     \item{\code{SBD}}{Soil bulk density (g/cm3, kg/dm3, or kg/l)}
 
+    \item{\code{SD}}{Soil depth (cm). If \code{x} is a SpatRaster, this should not be a layer, but a constant that is passed seperately as an additional argument}
+
 }
 }
 
@@ -50,11 +52,9 @@ Aramburu Merlos, F., Silva, J.V., Baudron, F., Hijmans, R.J. (2023). Estimating 
 }
 
 
-
 \value{
 Numeric or SpatRaster with exchangeable acidity after liming. 
 }
-
 
 
 \seealso{
