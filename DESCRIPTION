@@ -1,6 +1,6 @@
 Package: limer
 Type: Package
-Title: Acidic soil management for agriculture
+Title: Acidic Soil Management for Agriculture
 Version: 0.1-8
 Depends: R (>= 3.5.0)
 Date: 2024-11-12

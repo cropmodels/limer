@@ -33,7 +33,7 @@ setMethod("limeEffect", signature(x="SpatRaster"),
 				} 
 			)
 		}		
-		terra::lapp(r, fun = .inv_lapp, usenames=TRUE, lime_rate=lime_rate[1], ..., filename="", overwrite=FALSE, wopt=list())
+		terra::lapp(x, fun = .inv_lapp, usenames=TRUE, lime_rate=lime_rate[1], ..., filename="", overwrite=FALSE, wopt=list())
 	}
 )
 

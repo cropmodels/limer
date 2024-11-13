@@ -1,3 +1,4 @@
+
 # adjust parameter a based on clay content
 .aclay <- function(ECEC, clay){
   pmin(0.5 + (ECEC/clay)/40, 0.8)

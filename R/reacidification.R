@@ -9,9 +9,9 @@ acidification_equivalents <- function() {
 
 
 
-if (!isGeneric("acidification")) {setGeneric("acidification", function(x, ...) standardGeneric("acidification"))}
+if (!isGeneric("reacidification")) {setGeneric("reacidification", function(x, ...) standardGeneric("reacidification"))}
 
-setMethod("acidification", signature(x="data.frame"), 
+setMethod("reacidification", signature(x="data.frame"), 
 	function(x, TAS, decay=0.25, acidification=0, years=10, method="LiTAS", ...) {
 		yrs <- if (length(years)==1) 1:years else years
 		rate <- limeRate(x, method=method, TAS=TAS, ...)
@@ -38,14 +38,14 @@ setMethod("acidification", signature(x="data.frame"),
 
 
 
-setMethod("acidification", signature(x="matrix"), 
+setMethod("reacidification", signature(x="matrix"), 
 	function(x, TAS, decay=0.25, acidification=0, years=10, method="LiTAS", ...) {
 		acidification(data.frame(x), TAS, decay=decay, acidification=acidification, years=years, method=method, ...)
 	}
 )
 
 
-setMethod("acidification", signature(x="SpatRaster"), 
+setMethod("reacidification", signature(x="SpatRaster"), 
 	function(x, TAS, decay=0.25, acidification=0, years=10, method="LiTAS", ..., filename="", overwrite=FALSE, wopt=list()) {
 		yrs <- if (length(years)==1) 1:years else years
 		rate <- limeRate(x, method=method, TAS=TAS, ...)
