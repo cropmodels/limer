@@ -1,5 +1,5 @@
 
-acidification_equivalents <- function() {
+.old_acidification_equivalents <- function() {
 	x <- matrix(c("Potassium Nitrate", "13", "0", "Calcium Nitrate", "15.5", "0", "Ammonium Nitrate", "34", "3.6", "Anhydrous Ammonia", "80-82", "3.6", "Urea", "46", "3.6", "UAN Solutions", "28-32", "3.6", "Diammonium Phosphate (DAP)", "18", "5.4", "Ammonium Sulfate", "21", "7.2", "Monoammonium Phosphate (MAP)", "10-11", "7.2"), ncol=3, byrow=TRUE)
 	colnames(x) <- c("Fertilizer", "N content (%)", "lime needed (kg(ECC)/kg(N))")
 	x <- data.frame(x, check.names=FALSE)
@@ -7,6 +7,17 @@ acidification_equivalents <- function() {
 	x
 }
 
+
+acidification_equivalents <- function() {
+	data.frame(
+		fertilizer = c("urea", "ammonium nitrate", "ammonium sulphate", "calcium ammonium nitrate (CAN)", "diammonium phosphate (DAP)", 
+"monoammonium phosphate (MAP)", "NPKS 19:38:0:7", "NPK 23:23:0 (DAP-based)", "NPK 17:17:17 (DAP-based)", "NPK 17:17:17 (MAP-based)", "NPK 17:17:17 (MAP, KNO3-based)", "KNO3 (pure)", "Ca(NO3)2"), 
+		N = c(46, 34, 21, 27, 18.2, 11, 19, 23, 17, 17, 17, 13.9, 17.1), 
+		R0 = c(3.57, 3.57, 7.15, 2.8, 5.36, 6.91, 6.13, 4.28, 4.28, 4.28, 3.22, 0, 0), 
+		R50 = c(1.79, 1.79, 5.36, 1.01, 3.57, 5.12, 4.35, 2.49, 2.49, 2.49, 1.96, -1.79, -1.79), 
+		R100 = c(0, 0, 3.57, -0.78, 1.79, 3.33, 2.56, 0.71, 0.7, 0.7, 0.71, -3.57, -3.57)
+	)
+}
 
 
 if (!isGeneric("reacidification")) {setGeneric("reacidification", function(x, ...) standardGeneric("reacidification"))}

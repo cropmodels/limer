@@ -11,10 +11,15 @@ Get a table with acidification equivalents of nitrogen fertilizers. Acidificatio
 }
 
 
+
 \usage{
 acidification_equivalents()
 }
- 
+
+
+\value{
+a data.frame with the fertilizer product name, their N content, and the acidification equivalents depending on the fertilizer recovery by the crop. Recover is either zero (R0), 50 (R50) or 100\% (R100).
+} 
 
 \examples{
 acidification_equivalents()
