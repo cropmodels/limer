@@ -8,7 +8,7 @@ Imports: methods
 Authors@R: c(
 	person("Fernando", "Aramburu Merlos", role = c("cre", "aut"), email = "faramburumerlos@gmail.com"),
 	person("Robert J.", "Hijmans", role="aut")
-)
+	)
 Maintainer: Fernando Aramburu Merlos <faramburumerlos@gmail.com>
 Description: Functions to compute liming recommendations to alleviate soil acidity problems, and to predict soil and crop yield responses. This package was developed in support of the Guiding Acid soil management Investments in Africa project. 
 License: GPL (>=3)

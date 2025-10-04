@@ -33,7 +33,7 @@ Compute lime rate recommendations using one of several methods.
   
   \item{SD}{Soil depth (cm) of lime incorporation. Default value is 20cm. It does not affect the result if \code{unit = "meq/100g"} (default value) and \code{check_Ca = FALSE}.}
   
-  \item{TAS}{numeric. Target aluminum saturation after liming (\%). Required for methods \code{"LiTAS"}, \code{"Cochrane"}, \code{"NuMaSS"}}
+  \item{TAS}{numeric. Target acidity saturation after liming (\%). Required for methods \code{"LiTAS"}, \code{"Cochrane"}, \code{"NuMaSS"}}
   
   \item{target_Ve}{numeric. Target base saturation after liming (\%). Needed for method \code{"BrazilV"}. If not provided, default values can be retrieved by \code{crop_type}}
      
