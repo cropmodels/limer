@@ -23,15 +23,15 @@ Compute lime rate recommendations using one of several methods.
 
 
 \arguments{
-  \item{x}{SpatRaster, data.frame or matrix (with column names) with soil data. SpatRaster layer names or data.frame/matrix column names must match the names of the variables used by each specific method. See details.}
+  \item{x}{SpatRaster, data.frame or matrix (with column names) with soil data. SpatRaster layer names or data.frame/matrix column names must match the names of the variables used by each specific method. See details}
   
-   \item{method}{character. The method (formula) used to compute lime recommendation. Should partially match one of \code{c("LiTAS", "Kamprath", "Cochrane", "NuMASS", "BrazilV", "Goncalves")}. The matching is case-insensitive.}
+   \item{method}{character. The method (formula) used to compute lime recommendation. Should partially match one of \code{c("LiTAS", "Kamprath", "Cochrane", "NuMASS", "BrazilV", "Goncalves")}. The matching is case-insensitive}
   
-  \item{unit}{character. Lime rate unit of the output. If \code{unit = "t/ha"} or \code{unit = "kg/ha"} lime rate is transformed with function \code{\link{convert}} and soil bulk density (\code{SBD}) must be specified.} 
+  \item{unit}{character. Lime rate unit of the output. If \code{unit = "t/ha"} or \code{unit = "kg/ha"} lime rate is transformed with function \code{\link{convert}} and soil bulk density (\code{SBD}) must be specified} 
   
   \item{check_Ca}{logical. If \code{TRUE}, lime rate is adjusted to fix Calcium deficiencies and \code{exch_Ca} and \code{SBD} are required. Lime rate is set to a minimum of 150 kg/ha when Ca saturation is lower than 25\% (Sanchez, 2019)}
   
-  \item{SD}{Soil depth (cm) of lime incorporation. Default value is 20cm. It does not affect the result if \code{unit = "meq/100g"} (default value) and \code{check_Ca = FALSE}.}
+  \item{SD}{Soil depth (cm) of lime incorporation. Default value is 20cm. It does not affect the result if \code{unit = "meq/100g"} (default value) and \code{check_Ca = FALSE}}
   
   \item{TAS}{numeric. Target acidity saturation after liming (\%). Required for methods \code{"LiTAS"}, \code{"Cochrane"}, \code{"NuMaSS"}}
   
@@ -39,7 +39,7 @@ Compute lime rate recommendations using one of several methods.
      
   \item{X}{Crop nutrient requirement for Calcium and Magnesium. Optional for method \code{"Goncalves"}}
     
-  \item{crop_type}{One of \code{c("pasture", "cereal", "legume", "vegetable", "fruit")}. Optional to get default \code{target_Ve} values for method \code{"BrazilV"} (when target_Ve is not provided).}
+  \item{crop_type}{One of \code{c("pasture", "cereal", "legume", "vegetable", "fruit")}. Optional to get default \code{target_Ve} values for method \code{"BrazilV"} (when target_Ve is not provided)}
 
   \item{...}{algorithm specific additional arguments for computing the lime rate}
   

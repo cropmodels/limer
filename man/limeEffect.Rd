@@ -5,11 +5,11 @@
 \alias{limeEffect,SpatRaster-method}
 
 \title{
-Effect of lime on Al saturation
+Effect of lime on acidity saturation
 }
 
 \description{
-Compute the effect of lime on Al saturation. This is computed by inverting the LiTAS model.
+Compute the effect of lime on acidity saturation. This is computed by inverting the LiTAS model.
 }
 
 \usage{
