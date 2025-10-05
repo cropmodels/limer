@@ -182,8 +182,37 @@
 # Aramburu Merlos et al. xxx
 .lr_litas <- function(exch_ac, ECEC, TAS, a = 0.6, b = 0.2){
   tas <- TAS/100
+  exch_ac <- pmin(exch_ac, ECEC)  
   lf <- 1/(a + tas * (b-a))
   pmax(0, lf * (exch_ac - tas * ECEC))
+}
+
+.lr_litas2 <- function(exch_ac, exch_Al, ECEC, TAS, a = 0.6, b = 0.2){
+	tas <- TAS/100
+	exch_ac <- pmax(exch_ac, exch_Al)
+	exch_ac <- pmin(ECEC, exch_ac)
+	exch_Al <- pmin(ECEC, exch_Al)
+	al_sat <- exch_Al / ECEC
+	ac_sat <- exch_ac / ECEC
+	gap <- pmax(0, al_sat - tas)
+	r <- pmin(1, exch_Al/exch_ac)
+	r[al_sat <= tas] <- 0
+	Al_TAS <- 100 * (ac_sat - pmax(0, gap * r))
+	.lr_litas(exch_ac, ECEC, Al_TAS, a=a, b=b)
+}
+
+.plot_al <- function() {
+	ac <- seq(1, 21, .5)
+	x <- .lr_litas(ac, ECEC=20, TAS=15)
+	plot(ac, x, type="l", ylab="Al adjusted lime rate", xlab="exchangeable acidity", las=1, lwd=2); 
+	points(ac, .lr_litas2(ac, 0, 20, 15), pch=20, col="light gray")
+	points(ac, .lr_litas2(ac, ac*.25, 20, 15), pch=20, col="red")
+	points(ac, .lr_litas2(ac, ac*.5, 20, 15), pch=20, col="orange")
+	points(ac, .lr_litas2(ac, ac*.75, 20, 15), pch=20, col="blue")
+	points(ac, .lr_litas2(ac, ac, 20, 15), pch=20)
+	legend("topleft", legend=c(0, 25, 50, 75, 100), col=c("light gray", "red", "orange", "blue", "black"), pch=20, 
+		title="\nAl saturation relative\n  to acidity saturation (%)  ")
+	text(15.5, 25, "LiTAS", srt=48)
 }
 
 
