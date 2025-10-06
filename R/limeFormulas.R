@@ -201,18 +201,17 @@
 	.lr_litas(exch_ac, ECEC, Al_TAS, a=a, b=b)
 }
 
-.plot_al <- function() {
-	ac <- seq(1, 21, .5)
-	x <- .lr_litas(ac, ECEC=20, TAS=15)
-	plot(ac, x, type="l", ylab="Al adjusted lime rate", xlab="exchangeable acidity", las=1, lwd=2); 
-	points(ac, .lr_litas2(ac, 0, 20, 15), pch=20, col="light gray")
-	points(ac, .lr_litas2(ac, ac*.25, 20, 15), pch=20, col="red")
-	points(ac, .lr_litas2(ac, ac*.5, 20, 15), pch=20, col="orange")
-	points(ac, .lr_litas2(ac, ac*.75, 20, 15), pch=20, col="blue")
-	points(ac, .lr_litas2(ac, ac, 20, 15), pch=20)
-	legend("topleft", legend=c(0, 25, 50, 75, 100), col=c("light gray", "red", "orange", "blue", "black"), pch=20, 
-		title="\nAl saturation relative\n  to acidity saturation (%)  ")
-	text(15.5, 25, "LiTAS", srt=48)
+.plot_al <- function(ac=seq(1, 21, .5), ECEC=20, TAS=15) {
+	x <- .lr_litas(ac, ECEC, TAS)
+	plot(ac, x, type="l", ylab="Al adjusted LR", xlab="Exchangeable acidity", las=1, lwd=2, 
+		ylim=c(0, max(x)+1), main=paste0("TAS=",TAS, "; ECEC=",ECEC))
+	points(ac, .lr_litas2(ac, 0, ECEC, TAS), pch=20, col="light gray")
+	points(ac, .lr_litas2(ac, ac*.25, ECEC, TAS), pch=20, col="red")
+	points(ac, .lr_litas2(ac, ac*.5, ECEC, TAS), pch=20, col="orange")
+	points(ac, .lr_litas2(ac, ac*.75, ECEC, TAS), pch=20, col="blue")
+	points(ac, .lr_litas2(ac, ac, ECEC, TAS), pch=20)
+	legend("topleft", legend=c(0, 25, 50, 75, 100, "", "LiTAS"), col=c("light gray", "red", "orange", "blue", rep("black", 3)), bty="n",
+		pch=c(rep(20,5),NA,NA), lty=c(rep(-1, 6), 1), lwd=2, title="\nAl saturation relative\n  to acidity saturation (%)  \n")
 }
 
 
